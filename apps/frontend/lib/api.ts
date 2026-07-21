@@ -9,7 +9,7 @@ export async function getPortfolioHome(): Promise<PortfolioHome> {
   }
 
   try {
-    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/portfolio/home/`, {
+    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/portfolio/home`, {
       next: { revalidate: 60 }
     });
 

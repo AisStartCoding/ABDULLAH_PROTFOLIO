@@ -10,8 +10,8 @@ type GlowButtonProps = {
 export function GlowButton({ href, children, variant = "primary" }: GlowButtonProps) {
   const classes =
     variant === "primary"
-      ? "border-cyan-300/50 bg-cyan-300 text-slate-950 shadow-[0_0_30px_rgba(34,211,238,.28)] hover:bg-white"
-      : "border-slate-500/40 bg-slate-950/50 text-slate-100 hover:border-cyan-300/70 hover:text-cyan-100";
+      ? "border-green-600 bg-green-600 text-slate-950 shadow-[0_14px_34px_rgba(34,197,94,.25)] hover:bg-green-500"
+      : "border-slate-700/60 bg-slate-900 text-slate-200 hover:border-green-500/40 hover:text-green-400 hover:shadow-[0_12px_30px_rgba(34,197,94,.15)]";
 
   return (
     <Link

@@ -12,8 +12,8 @@ export function TechStack({ items }: { items: TechStackItem[] }) {
           title="Built like a deployable product"
           description="The portfolio itself is structured as a production app with frontend, backend, database, proxy, and CI/CD concerns."
         />
-        <div className="glass-panel flex flex-wrap items-center justify-center gap-3 rounded-lg p-6">
-          <Cpu className="h-5 w-5 text-cyan-300" />
+        <div className="glass-panel card-glow flex flex-wrap items-center justify-center gap-3 rounded-lg p-6">
+          <Cpu className="h-5 w-5 text-green-400" />
           {items.map((item) => <Chip key={item.id}>{item.name}</Chip>)}
         </div>
       </div>

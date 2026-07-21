@@ -49,6 +49,13 @@ export type Experience = {
   bullets: { id: number; text: string; order: number }[];
 };
 
+export type ProjectCaseStudyStage = {
+  id: number;
+  stage: "problem" | "architecture" | "design" | "technology" | "result";
+  title: string;
+  body: string;
+};
+
 export type Project = {
   id: number;
   title: string;
@@ -57,6 +64,7 @@ export type Project = {
   architecture_notes?: string;
   detail_url?: string;
   tags: { id: number; name: string; order: number }[];
+  case_study?: ProjectCaseStudyStage[];
 };
 
 export type PipelineStep = {

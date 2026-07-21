@@ -1,11 +1,11 @@
-# Backend Command Center Portfolio
+# Abdullah Portfolio
 
-A dynamic DevOps command center portfolio for Abdullah Ibna Siddiquie. The project combines a Next.js App Router frontend with a Django REST Framework backend, PostgreSQL-ready data models, admin-editable content, Docker/Nginx deployment assets, and CI/CD documentation.
+A light, animated backend engineering portfolio for Abdullah Ibna Siddiquie. The project combines a Next.js App Router frontend with a Django REST Framework backend, PostgreSQL-ready data models, a custom private `/studio` admin panel, Docker/Nginx deployment assets, and CI/CD documentation.
 
 ## Stack
 
-- Frontend: Next.js, TypeScript, Tailwind CSS, Motion, React Three Fiber, Drei
-- Backend: Django, Django REST Framework, PostgreSQL-ready settings, Django Admin
+- Frontend: Next.js, TypeScript, Tailwind CSS, Framer Motion, lucide-react
+- Backend: Django, Django REST Framework, Django sessions, PostgreSQL-ready settings
 - Deployment: Docker Compose, Gunicorn, Nginx, GitHub Actions
 
 ## Local Setup
@@ -19,7 +19,8 @@ python -m venv .venv
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py seed_portfolio
-python manage.py createsuperuser
+$env:PORTFOLIO_OWNER_PASSWORD="your-secure-password"
+python manage.py ensure_owner_user
 python manage.py runserver 8000
 ```
 
@@ -31,24 +32,20 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. The frontend reads `NEXT_PUBLIC_API_BASE_URL`; if the API is unavailable it falls back to typed local content.
+Open `http://localhost:3000`.
 
-## Admin Editing
+## Private Studio
 
-Run the backend, open `http://localhost:8000/admin/`, sign in with your superuser, and edit portfolio content from the `portfolio` models. The homepage API is available at:
+Portfolio content is managed from `http://localhost:3000/studio`. Only the Django user named `Abdullah` can access protected studio APIs. Create or update that user with `python manage.py ensure_owner_user` and the `PORTFOLIO_OWNER_PASSWORD` environment variable.
+
+Public API:
 
 - `GET /api/portfolio/home/`
 - `POST /api/contact/`
 
-## Deployment
+Private API:
 
-Copy `.env.example` files, set production values, then run:
-
-```bash
-docker compose -f infra/docker-compose.yml up -d --build
-```
-
-See [deployment.md](docs/deployment.md) for VPS, Nginx, and GitHub Actions details.
+- `/api/studio/*`
 
 ## Checks
 

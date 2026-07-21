@@ -2,33 +2,20 @@
 
 ## Global Motion
 
-- Motion is smooth and restrained, more like infrastructure telemetry than a marketing page.
-- Scroll reveals sections, cards, and pipeline steps.
-- Reduced-motion users receive static states and no distracting transforms.
+- Motion should feel polished and professional, not distracting.
+- Cards reveal on scroll, lift on hover, and show soft glow around the edge.
+- Reduced-motion users receive static states through `prefers-reduced-motion`.
 
-## 3D Scene
+## Card Behavior
 
-React Three Fiber renders a lightweight background:
-
-- Floating server core
-- Grid floor
-- Network nodes
-- Particles
-- Data-flow lines
-- Pipeline beam
-
-## Section Behavior
-
-- Hero: server core slowly rotates
-- Skills: nodes orbit around the center
-- Pipeline: beam intensity increases and terminal logs animate
-- Architecture Lab: graph panels expand into view
-- Contact: signal beam pulses subtly
+- Shared card wrapper handles reveal and hover motion.
+- Metric cards use a subtle stagger.
+- Project, skill, architecture, and pipeline cards use consistent elevation.
+- Glow effects stay soft and readable on the light theme.
 
 ## Performance
 
-- Canvas is lazy-loaded from a client-only component
-- DPR is capped
-- Heavy models are avoided
-- Mobile uses fewer particles
-- HTML owns all text content for SEO and accessibility
+- Avoid heavy 3D scenes by default.
+- Avoid images entirely.
+- Keep animations CSS/Framer Motion based.
+- Keep layout dimensions stable so hover states do not shift surrounding content.

@@ -30,7 +30,6 @@ class SiteSettings(models.Model):
 class HeroContent(models.Model):
     headline = models.CharField(max_length=220)
     subtext = models.TextField()
-    profile_image = models.ImageField(upload_to="profile/", blank=True)
     primary_button = models.CharField(max_length=80, default="View Projects")
     secondary_button = models.CharField(max_length=80, default="See Deployment Workflow")
     architecture_button = models.CharField(max_length=80, default="Architecture Lab")
@@ -91,7 +90,6 @@ class Project(OrderedModel):
     title = models.CharField(max_length=180)
     status = models.CharField(max_length=80)
     description = models.TextField()
-    image = models.ImageField(upload_to="projects/", blank=True)
     architecture_notes = models.TextField(blank=True)
     detail_url = models.URLField(blank=True)
 
@@ -119,7 +117,7 @@ class PipelineStep(OrderedModel):
 class ArchitectureBlueprint(OrderedModel):
     title = models.CharField(max_length=180)
     description = models.TextField()
-    accent = models.CharField(max_length=30, default="#22d3ee")
+    accent = models.CharField(max_length=30, default="#2563eb")
 
     def __str__(self) -> str:
         return self.title
@@ -161,10 +159,10 @@ class TechStackItem(OrderedModel):
 
 
 class ThemeSettings(models.Model):
-    primary = models.CharField(max_length=30, default="#22d3ee")
-    secondary = models.CharField(max_length=30, default="#10b981")
-    violet = models.CharField(max_length=30, default="#8b5cf6")
-    background = models.CharField(max_length=30, default="#020617")
+    primary = models.CharField(max_length=30, default="#2563eb")
+    secondary = models.CharField(max_length=30, default="#059669")
+    violet = models.CharField(max_length=30, default="#7c3aed")
+    background = models.CharField(max_length=30, default="#f8fbff")
 
     class Meta:
         verbose_name_plural = "Theme settings"
@@ -174,10 +172,10 @@ class ThemeSettings(models.Model):
 
 
 class AnimationSettings(models.Model):
-    intensity = models.FloatField(default=0.85)
-    speed = models.FloatField(default=0.75)
-    enable_3d = models.BooleanField(default=True)
-    enable_particles = models.BooleanField(default=True)
+    intensity = models.FloatField(default=0.75)
+    speed = models.FloatField(default=0.7)
+    enable_3d = models.BooleanField(default=False)
+    enable_particles = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Animation settings"

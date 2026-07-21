@@ -80,7 +80,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ("id", "title", "status", "description", "image", "architecture_notes", "detail_url", "order", "tags")
+        fields = ("id", "title", "status", "description", "architecture_notes", "detail_url", "order", "tags")
 
 
 class PipelineStepSerializer(serializers.ModelSerializer):
@@ -145,3 +145,81 @@ class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
         fields = ("name", "email", "subject", "message")
+
+
+class StudioContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = "__all__"
+
+
+class StudioSiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = "__all__"
+
+
+class StudioHeroContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HeroContent
+        fields = "__all__"
+
+
+class StudioProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = "__all__"
+
+
+class StudioProjectTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectTag
+        fields = "__all__"
+
+
+class StudioExperienceBulletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExperienceBullet
+        fields = "__all__"
+
+
+class StudioSkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = "__all__"
+
+
+class StudioSkillCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SkillCategory
+        fields = "__all__"
+
+
+class StudioExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = "__all__"
+
+
+class StudioArchitectureBlueprintSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureBlueprint
+        fields = "__all__"
+
+
+class StudioArchitectureModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureModule
+        fields = "__all__"
+
+
+class StudioArchitectureApiGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureApiGroup
+        fields = "__all__"
+
+
+class StudioArchitectureRelationshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArchitectureRelationship
+        fields = "__all__"

@@ -10,12 +10,12 @@ export function Skills({ categories }: { categories: SkillCategory[] }) {
         <SectionHeader
           eyebrow="Core systems"
           title="Backend, API, and infrastructure toolkit"
-          description="Skills are grouped like system capabilities, from Python services to secure VPS deployment."
+          description="A focused stack for building APIs, data models, deployment workflows, and stable production environments."
         />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <CommandCard key={category.id}>
-              <h3 className="mb-4 text-lg font-semibold text-white">{category.title}</h3>
+              <h3 className="mb-4 text-lg font-semibold text-slate-50">{category.title}</h3>
               <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill) => <Chip key={skill.id}>{skill.name}</Chip>)}
               </div>

@@ -23,7 +23,7 @@ from portfolio.models import (
 
 
 class Command(BaseCommand):
-    help = "Seed Abdullah's command center portfolio content."
+    help = "Seed Abdullah's backend engineering portfolio content."
 
     def handle(self, *args, **options):
         SiteSettings.objects.all().delete()
@@ -41,16 +41,16 @@ class Command(BaseCommand):
 
         SiteSettings.objects.create(
             name="Abdullah Ibna Siddiquie",
-            role="Backend Engineer • Python / Django / DevOps",
+            role="Backend Engineer | Python / Django / DevOps",
             email="abdullahibnasiddiquie12688@gmail.com",
             location="Dhaka, Bangladesh",
             open_status="Open to Remote",
             seo_title="Abdullah Ibna Siddiquie | Backend Engineer & DevOps Builder",
-            seo_description="Backend command center portfolio for Django, APIs, PostgreSQL, CI/CD, Docker, Nginx, SaaS, and healthcare architecture.",
+            seo_description="Backend engineering portfolio for Django, APIs, PostgreSQL, CI/CD, Docker, Nginx, SaaS, and healthcare architecture.",
         )
         HeroContent.objects.create(
-            headline="Backend systems, APIs, and infrastructure that ship fast.",
-            subtext="I build reliable backend systems, database structures, deployment pipelines, and production infrastructure for SaaS, healthcare, booking, and business platforms.",
+            headline="Backend systems, APIs, and deployments built for real products.",
+            subtext="I build Django backends, REST APIs, database structures, CI/CD pipelines, and VPS production infrastructure for SaaS, healthcare, booking, and business platforms.",
             terminal_lines=[
                 "$ git push origin production",
                 "github-actions: build, test, dockerize",
@@ -59,8 +59,8 @@ class Command(BaseCommand):
                 "live in 48s",
             ],
         )
-        ThemeSettings.objects.create()
-        AnimationSettings.objects.create()
+        ThemeSettings.objects.create(primary="#2563eb", secondary="#059669", violet="#7c3aed", background="#f8fbff")
+        AnimationSettings.objects.create(intensity=0.75, speed=0.7, enable_3d=False, enable_particles=False)
 
         metrics = [
             ("40%", "Deployment Efficiency", "via CI/CD automation"),
@@ -146,7 +146,7 @@ class Command(BaseCommand):
             order=0,
             title="SaaS Platform Blueprint",
             description="A scalable SaaS architecture for multi-tenant business platforms.",
-            accent="#22d3ee",
+            accent="#2563eb",
             modules=[
                 "Tenant Management",
                 "User & Role Management",
@@ -155,7 +155,7 @@ class Command(BaseCommand):
                 "Order/Booking Module",
                 "Payment Tracking",
                 "Audit Logs",
-                "Admin Dashboard",
+                "Operations Console",
                 "Notification System",
             ],
             api_groups=[
@@ -194,7 +194,7 @@ class Command(BaseCommand):
                 "Medical Records",
                 "Payment System",
                 "Notifications",
-                "Admin Dashboard",
+                "Operations Console",
                 "Audit & Security Logs",
             ],
             api_groups=[
@@ -208,7 +208,7 @@ class Command(BaseCommand):
                 "/api/medical-records/",
                 "/api/payments/",
                 "/api/notifications/",
-                "/api/admin/",
+                "/api/ops/",
             ],
             relationships=[
                 ("User", "PatientProfile", "extends"),

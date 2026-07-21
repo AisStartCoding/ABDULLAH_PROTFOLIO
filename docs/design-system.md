@@ -2,30 +2,29 @@
 
 ## Direction
 
-The interface is a backend command center: dense, operational, cinematic, and technical. It avoids a resume look and instead presents Abdullah as someone who builds APIs, production infrastructure, SaaS architecture, and deployment systems.
+The interface is a light, polished backend engineering portfolio. It should feel credible to recruiters, founders, and technical hiring teams while still showing Abdullah's production mindset.
 
 ## Visual Language
 
-- Background: deep graphite and navy black
-- Accents: electric cyan, teal, neon green, restrained violet
-- Surfaces: glass panels with subtle border glow
-- Typography: crisp sans-serif hierarchy with compact dashboard spacing
-- Cards: system modules with status badges, telemetry rows, and terminal details
+- Background: white, soft gray, and very light blue
+- Accents: blue, emerald, amber, and restrained violet
+- Surfaces: white cards with soft borders, depth, and animated glow on hover
+- Typography: `Space Grotesk` for headings and `Inter` for body/UI text
+- Imagery: no profile images, project images, stock images, or generated images
 
 ## Components
 
-- `SectionHeader`: compact title, eyebrow, and supporting text
-- `GlowButton`: command-style CTA buttons
-- `CommandCard`: reusable glass system panel
+- `SectionHeader`: compact eyebrow, title, and supporting text
+- `GlowButton`: primary and secondary CTAs
+- `CommandCard`: shared animated card wrapper
 - `MetricCard`: animated KPI card
-- `TerminalPanel`: deployment log display
-- `ProjectCard`: project module with status and architecture actions
-- `Pipeline`: scroll-aware CI/CD workflow
+- `TerminalPanel`: light proof/log panel
+- `/studio`: custom private content manager
 
 ## Accessibility
 
-- Text remains HTML, never canvas-only
-- Focus states are visible
+- Text remains semantic HTML
+- Focus states remain visible
 - Motion honors `prefers-reduced-motion`
-- Color contrast uses bright foreground values on dark surfaces
-- Layout uses responsive constraints to avoid horizontal overflow
+- Cards use stable spacing and responsive grids
+- Contrast should stay readable on all light surfaces

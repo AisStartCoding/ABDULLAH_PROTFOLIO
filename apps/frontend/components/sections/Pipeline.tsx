@@ -2,12 +2,143 @@
 
 import { motion } from "framer-motion";
 import { GitBranch, ServerCog } from "lucide-react";
+import { useRef } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { gsap, useGSAP } from "@/lib/gsap";
+import { MOTION } from "@/lib/motion";
 import type { PipelineStep } from "@/types/portfolio";
 
 export function Pipeline({ steps }: { steps: PipelineStep[] }) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const progressLineRef = useRef<HTMLDivElement | null>(null);
+  const badgeRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const logRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current || !progressLineRef.current) return;
+      if (steps.length === 0) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add(
+        {
+          reducedOrMobile: "(prefers-reduced-motion: reduce), (max-width: 767px)",
+          full: "(prefers-reduced-motion: no-preference) and (min-width: 768px)"
+        },
+        (context) => {
+          const { reducedOrMobile } = context.conditions as { reducedOrMobile: boolean };
+
+          const badges = badgeRefs.current.filter(Boolean) as HTMLSpanElement[];
+          const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+          const logs = logRefs.current.filter(Boolean) as HTMLDivElement[];
+
+          if (reducedOrMobile) {
+            // Simple, non-pinned sequential reveal — no scroll hijacking.
+            gsap.set(progressLineRef.current, { scaleY: 1 });
+            badges.forEach((badge, index) => {
+              gsap.fromTo(
+                badge,
+                { boxShadow: "0 0 0 rgba(34,197,94,0)" },
+                {
+                  boxShadow: "0 0 18px rgba(34,197,94,0.55)",
+                  borderColor: "rgba(34,197,94,0.9)",
+                  duration: MOTION.enter.duration,
+                  ease: MOTION.enter.ease,
+                  scrollTrigger: {
+                    trigger: cards[index] ?? badge,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                  }
+                }
+              );
+            });
+            logs.forEach((log, index) => {
+              gsap.fromTo(
+                log,
+                { opacity: 0.35, borderColor: "rgba(51,65,85,0.6)" },
+                {
+                  opacity: 1,
+                  borderColor: "rgba(34,197,94,0.6)",
+                  duration: MOTION.enter.duration,
+                  ease: MOTION.enter.ease,
+                  scrollTrigger: {
+                    trigger: cards[index] ?? log,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                  }
+                }
+              );
+            });
+
+            return () => {
+              // gsap.matchMedia cleans up its own scroll triggers on revert
+            };
+          }
+
+          gsap.set(progressLineRef.current, { scaleY: 0, transformOrigin: "top" });
+          gsap.set(badges, { boxShadow: "0 0 0 rgba(34,197,94,0)", borderColor: "rgba(34,197,94,0.3)" });
+          gsap.set(logs, { opacity: 0.35, borderColor: "rgba(51,65,85,0.6)" });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "+=150%",
+              scrub: MOTION.scrub,
+              pin: true
+            }
+          });
+
+          tl.to(progressLineRef.current, { scaleY: 1, ease: "none" }, 0);
+
+          steps.forEach((_, index) => {
+            const position = index / steps.length;
+            const badge = badges[index];
+            const log = logs[index];
+
+            if (badge) {
+              tl.to(
+                badge,
+                {
+                  boxShadow: "0 0 18px rgba(34,197,94,0.6)",
+                  borderColor: "rgba(34,197,94,0.9)",
+                  scale: 1.08,
+                  ease: "none"
+                },
+                position
+              ).to(
+                badge,
+                { scale: 1, ease: "none" },
+                position + 0.5 / steps.length
+              );
+            }
+
+            if (log) {
+              tl.to(
+                log,
+                {
+                  opacity: 1,
+                  borderColor: "rgba(34,197,94,0.6)",
+                  ease: "none"
+                },
+                position
+              );
+            }
+          });
+
+          return () => tl.scrollTrigger?.kill();
+        }
+      );
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef, dependencies: [steps] }
+  );
+
   return (
-    <section id="pipeline" className="px-4 py-20 sm:px-6 lg:px-8">
+    <section id="pipeline" ref={sectionRef} className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="CI/CD workflow"
@@ -15,16 +146,20 @@ export function Pipeline({ steps }: { steps: PipelineStep[] }) {
           description="A deployment path built around GitHub Actions, Docker images, secure SSH rollout, and Nginx/Gunicorn production serving."
         />
         <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
-          <div className="glass-panel rounded-lg p-6">
+          <div className="glass-panel card-glow rounded-lg p-6">
             <div className="mb-6 flex items-center gap-3">
-              <ServerCog className="h-8 w-8 text-cyan-300" />
+              <ServerCog className="h-8 w-8 text-blue-400" />
               <div>
-                <h3 className="text-xl font-semibold text-white">Production pipeline</h3>
-                <p className="text-sm text-slate-400">Scroll-triggered release sequence</p>
+                <h3 className="text-xl font-semibold text-slate-50">Production pipeline</h3>
+                <p className="text-sm text-slate-400">Release sequence with visible ownership</p>
               </div>
             </div>
             <div className="relative space-y-4">
-              <div className="absolute bottom-0 left-5 top-0 w-px bg-gradient-to-b from-cyan-300 via-emerald-300 to-violet-300" />
+              <div className="absolute bottom-0 left-5 top-0 w-px bg-slate-700/50" />
+              <div
+                ref={progressLineRef}
+                className="absolute bottom-0 left-5 top-0 w-px bg-gradient-to-b from-green-500 via-blue-500 to-violet-500"
+              />
               {steps.map((step, index) => (
                 <motion.div
                   key={step.id}
@@ -33,34 +168,43 @@ export function Pipeline({ steps }: { steps: PipelineStep[] }) {
                   viewport={{ once: false, amount: 0.7 }}
                   className="relative flex gap-4"
                 >
-                  <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-cyan-300/40 bg-slate-950 text-sm font-semibold text-cyan-100">
+                  <span
+                    ref={(el) => {
+                      badgeRefs.current[index] = el;
+                    }}
+                    className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-green-500/30 bg-slate-900 text-sm font-semibold text-green-400"
+                  >
                     {index + 1}
                   </span>
-                  <div className="rounded-lg border border-slate-700/70 bg-slate-950/45 p-4">
-                    <h4 className="font-semibold text-white">{step.title}</h4>
+                  <div
+                    ref={(el) => {
+                      cardRefs.current[index] = el;
+                    }}
+                    className="rounded-lg border border-slate-700/60 bg-slate-900 p-4"
+                  >
+                    <h4 className="font-semibold text-slate-50">{step.title}</h4>
                     <p className="mt-1 text-sm text-slate-400">{step.description}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
-          <div className="glass-panel rounded-lg p-6 font-mono text-sm">
-            <div className="mb-4 flex items-center gap-2 text-cyan-200">
+          <div className="glass-panel card-glow rounded-lg p-6 font-mono text-sm">
+            <div className="mb-4 flex items-center gap-2 text-green-400">
               <GitBranch className="h-4 w-4" />
               deployment.log
             </div>
             <div className="space-y-4">
               {steps.map((step, index) => (
-                <motion.div
+                <div
                   key={step.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.06 }}
-                  className="rounded-md border border-slate-800 bg-black/30 p-3 text-slate-300"
+                  ref={(el) => {
+                    logRefs.current[index] = el;
+                  }}
+                  className="rounded-md border border-slate-700/60 bg-slate-900 p-3 text-slate-300"
                 >
-                  <span className="text-emerald-300">ok</span> {step.command || step.title}
-                </motion.div>
+                  <span className="text-green-400">ok</span> {step.command || step.title}
+                </div>
               ))}
             </div>
           </div>
