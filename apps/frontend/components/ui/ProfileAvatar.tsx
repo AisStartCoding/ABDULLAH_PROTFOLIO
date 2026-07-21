@@ -34,7 +34,7 @@ function AvatarImage({ name, size }: { name: string; size: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/profile.jpg"
+      src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/profile.jpg`}
       alt={name}
       className="h-full w-full object-cover"
       onError={() => setBroken(true)}

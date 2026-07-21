@@ -3,6 +3,9 @@ const repoName = "ABDULLAH_PROTFOLIO";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubPagesBuild ? `/${repoName}` : ""
+  },
   ...(isGithubPagesBuild
     ? {
         output: "export",
