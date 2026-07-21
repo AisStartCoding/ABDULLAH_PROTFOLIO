@@ -5,7 +5,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useCallback, useEffect, useRef, useState, type MutableRefObject } from "react";
 import { DeepField, galaxyPresets } from "@/components/three/DeepField";
 import { Meteors } from "@/components/three/Meteors";
-import { QuestionHud } from "@/components/three/QuestionHud";
 import { StackOrbit } from "@/components/three/StackOrbit";
 import { gsap } from "@/lib/gsap";
 
@@ -202,7 +201,6 @@ export function CommandScene({ categories = [] }: { categories?: string[] }) {
         </Suspense>
       </Canvas>
       <div className="pointer-events-none absolute inset-0 bg-slate-950/65 backdrop-blur-[1px]" />
-      <QuestionHud reduced={reduced} />
     </div>
   );
 }

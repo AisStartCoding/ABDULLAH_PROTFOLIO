@@ -34,16 +34,21 @@ export function CaseStudyCard({ project }: { project: Project }) {
         <a href="#architecture" className="rounded-md border border-blue-500/30 px-3 py-2 text-blue-400 hover:bg-blue-500/10">
           Architecture
         </a>
-        {hasCaseStudy ? (
-          <CaseStudyDialog project={project} />
-        ) : (
+        {hasCaseStudy ? <CaseStudyDialog project={project} /> : null}
+        {project.detail_url ? (
           <a
-            href={project.detail_url || "#contact"}
-            className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40"
+            href={project.detail_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40 hover:text-green-400"
           >
+            Live Site <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        ) : !hasCaseStudy ? (
+          <a href="#contact" className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40">
             View Details <ExternalLink className="h-3.5 w-3.5" />
           </a>
-        )}
+        ) : null}
       </div>
     </CommandCard>
   );
@@ -71,6 +76,16 @@ function CaseStudyDialog({ project }: { project: Project }) {
               <Dialog.Description className="mt-2 text-sm leading-6 text-slate-400">
                 {project.description}
               </Dialog.Description>
+              {project.detail_url ? (
+                <a
+                  href={project.detail_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-green-400 hover:text-green-300"
+                >
+                  Visit live site <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              ) : null}
             </div>
             <Dialog.Close asChild>
               <button

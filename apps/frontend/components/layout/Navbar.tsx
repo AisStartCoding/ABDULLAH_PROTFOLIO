@@ -4,7 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Activity, Github, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import type { SiteSettings, SocialLink } from "@/types/portfolio";
+import { QuestionTicker } from "@/components/layout/QuestionTicker";
+import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
+import type { Experience, SiteSettings, SkillCategory, SocialLink } from "@/types/portfolio";
 
 const navItems = [
   { href: "#projects", label: "Projects" },
@@ -13,24 +15,39 @@ const navItems = [
   { href: "#contact", label: "Contact" }
 ];
 
-export function Navbar({ settings, socialLinks }: { settings: SiteSettings; socialLinks: SocialLink[] }) {
+export function Navbar({
+  settings,
+  socialLinks,
+  skillCategories,
+  experiences
+}: {
+  settings: SiteSettings;
+  socialLinks: SocialLink[];
+  skillCategories: SkillCategory[];
+  experiences: Experience[];
+}) {
   const [open, setOpen] = useState(false);
   const github = socialLinks.find((link) => link.label.toLowerCase() === "github");
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-slate-700/60 bg-slate-950/80 backdrop-blur-xl">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="#hero" onClick={() => setOpen(false)} className="flex items-center gap-3 text-sm font-semibold text-slate-50">
-          <motion.span
-            whileHover={{ rotate: 8, scale: 1.04 }}
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-green-500/30 bg-green-500/10 shadow-sm"
-          >
-            <Activity className="h-4 w-4 text-green-400" />
-          </motion.span>
-          <span className="hidden sm:block">{settings.name}</span>
-        </Link>
+      <nav className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <div className="flex shrink-0 items-center gap-3">
+          <ProfileAvatar settings={settings} skillCategories={skillCategories} experiences={experiences} />
+          <Link href="#hero" onClick={() => setOpen(false)} className="hidden items-center gap-2 text-sm font-semibold text-slate-50 sm:flex">
+            <motion.span
+              whileHover={{ rotate: 8, scale: 1.04 }}
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-green-500/30 bg-green-500/10 shadow-sm"
+            >
+              <Activity className="h-4 w-4 text-green-400" />
+            </motion.span>
+            <span>{settings.name}</span>
+          </Link>
+        </div>
 
-        <div className="hidden items-center gap-6 text-xs font-medium uppercase tracking-[0.16em] text-slate-400 md:flex">
+        <QuestionTicker />
+
+        <div className="hidden shrink-0 items-center gap-6 text-xs font-medium uppercase tracking-[0.16em] text-slate-400 lg:flex">
           {navItems.map((item) => (
             <DesktopNavLink key={item.href} href={item.href}>
               {item.label}
@@ -38,7 +55,7 @@ export function Navbar({ settings, socialLinks }: { settings: SiteSettings; soci
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
           <span className="hidden rounded-md border border-green-500/30 bg-green-500/10 px-3 py-1 text-xs text-green-400 sm:inline-flex">
             {settings.open_status}
           </span>

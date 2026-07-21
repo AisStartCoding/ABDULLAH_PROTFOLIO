@@ -44,7 +44,12 @@ export default async function Home() {
       </div>
       <CommandScene categories={data.skill_categories.map((category) => category.title)} />
       <div className="relative z-10">
-        <Navbar settings={data.settings} socialLinks={data.social_links} />
+        <Navbar
+          settings={data.settings}
+          socialLinks={data.social_links}
+          skillCategories={data.skill_categories}
+          experiences={data.experiences}
+        />
         <Hero hero={data.hero} settings={data.settings} />
         <Metrics metrics={data.metrics} />
         <Skills categories={data.skill_categories} />

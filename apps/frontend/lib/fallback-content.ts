@@ -1,33 +1,47 @@
 import type { PortfolioHome, ProjectCaseStudyStage } from "@/types/portfolio";
 
 const caseStudies: Record<string, Omit<ProjectCaseStudyStage, "id">[]> = {
-  "E-commerce SaaS Platform": [
-    { stage: "problem", title: "Problem", body: "Multiple merchants needed isolated catalogs, orders, and admin permissions on one platform, without one tenant's data leaking into another's." },
-    { stage: "architecture", title: "Architecture", body: "Django REST APIs modeled tenants, products, orders, and users as related resources, with permission checks scoping every query to the requesting tenant." },
-    { stage: "design", title: "Design", body: "Role-based admin flows separated storefront, merchant, and super-admin capabilities so each user only saw the operations relevant to their role." },
-    { stage: "technology", title: "Technology", body: "Built on Django, PostgreSQL, Docker, and Nginx/Gunicorn, with a GitHub Actions CI/CD pipeline handling build, test, and deploy." },
-    { stage: "result", title: "Result", body: "Shipped a working multi-tenant checkout and order pipeline with automated, zero-downtime deployments to production VPS." }
+  "Nirog Healthcare Platform": [
+    { stage: "problem", title: "Problem", body: "Patients and clinics needed one platform to manage bookings, consultations, prescriptions, and records instead of juggling phone calls and paper files." },
+    { stage: "architecture", title: "Architecture", body: "Django REST APIs modeled patient, doctor, and moderator profiles with appointment, consultation, and prescription resources, plus an audit-logged operations console." },
+    { stage: "design", title: "Design", body: "Separate patient and doctor flows shared one auth system, with moderators overseeing appointment conflicts and content moderation." },
+    { stage: "technology", title: "Technology", body: "Built on Django, DRF, PostgreSQL, Docker, and Nginx/Gunicorn, deployed to a production VPS with SSL." },
+    { stage: "result", title: "Result", body: "Live production platform handling real patient-doctor consultations and prescription management end-to-end." }
   ],
-  "Travel & Booking Platform": [
-    { stage: "problem", title: "Problem", body: "Travel inventory from third-party providers had to be combined with real-time availability while keeping bookings consistent under concurrent requests." },
+  "STech Holidays — Travel & Flight Booking": [
+    { stage: "problem", title: "Problem", body: "Travel inventory from third-party providers had to be combined with real-time flight/package availability while keeping bookings consistent under concurrent requests." },
     { stage: "architecture", title: "Architecture", body: "A Django backend orchestrated third-party API integrations behind a unified booking service, normalizing external responses into internal availability models." },
     { stage: "design", title: "Design", body: "Authenticated user flows separated browsing, holding, and confirming a booking, so partial or failed reservations never left orphaned records." },
     { stage: "technology", title: "Technology", body: "Built with Django, PostgreSQL, external REST API clients, containerized with Docker, and served through Nginx in production." },
-    { stage: "result", title: "Result", body: "Delivered a reliable booking backend that reflects live third-party availability and deploys cleanly to VPS infrastructure." }
+    { stage: "result", title: "Result", body: "Live production booking platform for flights and holiday packages, reflecting real third-party availability." }
   ],
-  "Hotel & Flight Booking System": [
-    { stage: "problem", title: "Problem", body: "Hotel and flight reservations needed shared conflict handling and lifecycle rules across very different inventory types." },
-    { stage: "architecture", title: "Architecture", body: "A multi-module booking engine modeled reservations, conflict detection, and state transitions (pending, confirmed, cancelled) as reusable Django components." },
-    { stage: "design", title: "Design", body: "Consistent reservation UX across hotel and flight modules meant conflict and cancellation logic behaved predictably regardless of booking type." },
-    { stage: "technology", title: "Technology", body: "Implemented in Django with PostgreSQL for transactional integrity, deployed via Docker on a production VPS." },
-    { stage: "result", title: "Result", body: "Produced a booking engine that handles overlapping reservation attempts safely and runs in production without double-booking incidents." }
+  "JG Pharmacy — Online Medicine Delivery": [
+    { stage: "problem", title: "Problem", body: "Customers needed a trustworthy way to order licensed medicines and lab tests online instead of relying on in-person pharmacy visits." },
+    { stage: "architecture", title: "Architecture", body: "Product catalog, prescription upload, and order/lab-test booking modules backed by a Django REST API and PostgreSQL." },
+    { stage: "design", title: "Design", body: "A simple customer-facing ordering flow paired with an admin backend for verifying prescriptions and fulfilling orders." },
+    { stage: "technology", title: "Technology", body: "Django, PostgreSQL, Docker, Nginx, Gunicorn, and a CI/CD pipeline to production VPS." },
+    { stage: "result", title: "Result", body: "Live platform serving real medicine and lab-test orders with home delivery in Dhaka." }
   ],
-  "Coaching Management System": [
-    { stage: "problem", title: "Problem", body: "Admins, teachers, and students each needed distinct workflows for scheduling, assignments, attendance, and notifications inside one system." },
-    { stage: "architecture", title: "Architecture", body: "Role-based access control (RBAC) drove the API design, with Django REST endpoints scoped per role for scheduling, grading, and attendance data." },
-    { stage: "design", title: "Design", body: "Each role's dashboard surfaced only its relevant actions: admins managed staff and classes, teachers handled assignments and attendance, students tracked their own schedule." },
-    { stage: "technology", title: "Technology", body: "Built on Django REST Framework with PostgreSQL, containerized with Docker for consistent deployment." },
-    { stage: "result", title: "Result", body: "Delivered a working RBAC platform coordinating scheduling, assignments, attendance, and notifications across three distinct user roles." }
+  "Mamun Sir Physics — O/A Level Coaching Platform": [
+    { stage: "problem", title: "Problem", body: "Students needed structured, exam-focused physics instruction and resources beyond ad-hoc tutoring." },
+    { stage: "architecture", title: "Architecture", body: "A role-based admin/teacher/student platform for course modules, scheduling, and resource delivery, extending the same RBAC pattern used across other coaching-style builds." },
+    { stage: "design", title: "Design", body: "Modules organized by topic (mechanics, electricity, waves, optics, modern physics) with a student-facing learning dashboard." },
+    { stage: "technology", title: "Technology", body: "Django, PostgreSQL, Docker, Nginx, Gunicorn, deployed to a production VPS." },
+    { stage: "result", title: "Result", body: "Live coaching platform actively used by O/A Level students for structured physics preparation." }
+  ],
+  "The Food Park — Food Ordering Platform": [
+    { stage: "problem", title: "Problem", body: "Local food vendors needed an online storefront and order pipeline instead of relying purely on walk-in and phone orders." },
+    { stage: "architecture", title: "Architecture", body: "Menu/catalog, cart, and order-management REST API backed by PostgreSQL, with an admin console for vendors." },
+    { stage: "design", title: "Design", body: "A straightforward browse-to-checkout customer flow paired with order tracking for fulfillment." },
+    { stage: "technology", title: "Technology", body: "Django, DRF, PostgreSQL, Docker, Nginx, Gunicorn, and automated CI/CD deployment." },
+    { stage: "result", title: "Result", body: "Deployed food ordering platform live in production, connecting customers with local vendors." }
+  ],
+  "Nomad — Social Travel Platform": [
+    { stage: "problem", title: "Problem", body: "Travelers wanted to document journeys chronologically and discover authentic recommendations, instead of fragmented, disconnected social posts." },
+    { stage: "architecture", title: "Architecture", body: "A REST API for day-by-day trip timelines and social discovery/feed features, backed by PostgreSQL." },
+    { stage: "design", title: "Design", body: "A chronological trip-narrative UX paired with community discovery, so recommendations stay tied to a real traveler's journey." },
+    { stage: "technology", title: "Technology", body: "Django, DRF, PostgreSQL, Docker, Nginx, Gunicorn, deployed to a production VPS." },
+    { stage: "result", title: "Result", body: "Live social travel platform used by real travelers to share and discover trip experiences." }
   ]
 };
 
@@ -81,15 +95,18 @@ export const fallbackPortfolio: PortfolioHome = {
     }
   ],
   projects: [
-    ["E-commerce SaaS Platform", "Scalable REST APIs for products, orders, users, admin, and multi-tenant business logic. Full CI/CD pipeline with automated deployment to VPS.", ["Django", "PostgreSQL", "Nginx", "Gunicorn", "Docker", "CI/CD"]],
-    ["Travel & Booking Platform", "Booking backend with third-party API integrations, real-time availability logic, user authentication, and production deployment.", ["Django", "PostgreSQL", "APIs", "Nginx", "Docker"]],
-    ["Hotel & Flight Booking System", "Multi-module booking engine for reservations, conflict handling, lifecycle management, and deployment on VPS.", ["Django", "Booking Logic", "PostgreSQL", "VPS", "Docker"]],
-    ["Coaching Management System", "Role-based platform for admin, teacher, and student workflows with scheduling, assignments, attendance, and notifications.", ["Django", "RBAC", "APIs", "PostgreSQL", "Docker"]]
-  ].map(([title, description, tags], index) => ({
+    ["Nirog Healthcare Platform", "Telehealth platform connecting patients, doctors, and moderators for appointments, live consultations, prescriptions, and medical records.", ["Django", "DRF", "PostgreSQL", "RBAC", "Docker"], "https://niroghealthapp.com/"],
+    ["STech Holidays — Travel & Flight Booking", "Travel booking platform for flights and holiday packages with real-time availability, third-party API integrations, and a full booking-to-payment flow.", ["Django", "PostgreSQL", "APIs", "Nginx", "Docker"], "https://www.stechholidays.com/"],
+    ["JG Pharmacy — Online Medicine Delivery", "E-commerce platform for ordering genuine medicines, booking lab tests, and submitting prescriptions for home delivery.", ["Django", "PostgreSQL", "E-commerce", "Docker"], "https://jgpharmacy.com/"],
+    ["Mamun Sir Physics — O/A Level Coaching Platform", "Online physics coaching platform with structured course modules, problem-solving sessions, and free learning resources for O/A Level students.", ["Django", "RBAC", "PostgreSQL", "Docker"], "https://mamunsirphysics.com/"],
+    ["The Food Park — Food Ordering Platform", "Food ordering and delivery platform connecting customers with local restaurants and vendors.", ["Django", "DRF", "PostgreSQL", "Nginx"], "https://thefoodpark.xyz/"],
+    ["Nomad — Social Travel Platform", "Social platform for travelers to document trips as day-by-day narratives, discover recommendations, and build community around shared travel experiences.", ["Django", "DRF", "PostgreSQL", "Docker"], "https://nomadtravelapp.com/"]
+  ].map(([title, description, tags, detailUrl], index) => ({
     id: index + 1,
     title: title as string,
     status: "Deployed",
     description: description as string,
+    detail_url: detailUrl as string,
     tags: (tags as string[]).map((name, tagIndex) => ({ id: index * 10 + tagIndex, name, order: tagIndex })),
     case_study: (caseStudies[title as string] ?? []).map((stage, stageIndex) => ({ id: index * 10 + stageIndex, ...stage }))
   })),
