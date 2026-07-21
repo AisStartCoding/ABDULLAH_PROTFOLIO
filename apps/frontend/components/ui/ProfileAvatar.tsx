@@ -57,11 +57,12 @@ export function ProfileAvatar({
 
   return (
     <div className="relative shrink-0">
-      <button
+      <motion.button
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-label={open ? "Close profile card" : "Open profile card"}
         aria-expanded={open}
+        whileTap={{ scale: 0.88 }}
         className="relative flex h-10 w-10 items-center justify-center rounded-full"
       >
         <motion.span
@@ -82,7 +83,7 @@ export function ProfileAvatar({
         <span className="relative h-9 w-9 overflow-hidden rounded-full border-2 border-slate-950 bg-slate-900">
           <AvatarImage name={settings.name} size={36} />
         </span>
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {open ? (
@@ -93,7 +94,7 @@ export function ProfileAvatar({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.97 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
-              className="absolute right-0 top-full z-50 mt-3 w-72 rounded-lg border border-slate-700/60 bg-slate-950/95 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+              className="absolute left-0 top-full z-50 mt-3 w-[min(18rem,calc(100vw-2rem))] rounded-lg border border-slate-700/60 bg-slate-950/95 p-4 shadow-[0_24px_70px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:p-5"
             >
               <button
                 type="button"

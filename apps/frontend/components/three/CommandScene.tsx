@@ -10,6 +10,18 @@ import { gsap } from "@/lib/gsap";
 
 const REST_ZOOM = 7.1;
 
+// Narrow/portrait viewports (phones) need the camera pulled back further so
+// the orbit doesn't get cropped by the tighter frame — widescreen desktop
+// keeps the original framing.
+function getRestZoom() {
+  if (typeof window === "undefined") return REST_ZOOM;
+  const aspect = window.innerWidth / window.innerHeight;
+  if (aspect < 0.65) return REST_ZOOM * 1.65;
+  if (aspect < 0.85) return REST_ZOOM * 1.4;
+  if (aspect < 1.1) return REST_ZOOM * 1.15;
+  return REST_ZOOM;
+}
+
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
 
@@ -142,9 +154,24 @@ export function CommandScene({ categories = [] }: { categories?: string[] }) {
   const { ref, inView } = useInView<HTMLDivElement>();
   const reduced = useReducedMotion();
   const shakeRef = useRef(0);
-  const zoomRef = useRef(REST_ZOOM);
+  const restZoomRef = useRef(getRestZoom());
+  const zoomRef = useRef(restZoomRef.current);
   const [presetIndex, setPresetIndex] = useState(0);
   const jumpTween = useRef<gsap.core.Timeline | null>(null);
+
+  // Re-measure the resting camera distance on resize/orientation change so
+  // rotating a phone or resizing a window keeps the orbit properly framed.
+  useEffect(() => {
+    const update = () => {
+      const next = getRestZoom();
+      restZoomRef.current = next;
+      if (!jumpTween.current || !jumpTween.current.isActive()) {
+        zoomRef.current = next;
+      }
+    };
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   // Double-click "jump to another galaxy": a fast dolly-zoom in, swap the
   // DeepField color/layout preset partway through, then dolly back out.
@@ -171,7 +198,7 @@ export function CommandScene({ categories = [] }: { categories?: string[] }) {
         setPresetIndex((prev) => (prev + 1 + Math.floor(Math.random() * (galaxyPresets.length - 1))) % galaxyPresets.length);
       })
       .to(proxy, {
-        z: REST_ZOOM,
+        z: restZoomRef.current,
         duration: 0.55,
         ease: "power2.out",
         onUpdate: () => {
@@ -191,7 +218,7 @@ export function CommandScene({ categories = [] }: { categories?: string[] }) {
       <Canvas
         className="pointer-events-auto"
         onDoubleClick={handleDoubleClick}
-        camera={{ position: [0, 0.5, REST_ZOOM], fov: 48 }}
+        camera={{ position: [0, 0.5, restZoomRef.current], fov: 48 }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={inView ? "always" : "never"}

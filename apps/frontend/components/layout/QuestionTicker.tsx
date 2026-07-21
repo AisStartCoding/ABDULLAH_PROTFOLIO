@@ -48,7 +48,7 @@ export function QuestionTicker() {
   }, [reduced]);
 
   return (
-    <div className="hidden flex-1 justify-center md:flex">
+    <div className="flex min-w-0 flex-1 justify-center">
       <motion.div
         key={pulseKey}
         initial={{ boxShadow: "0 0 0px rgba(34,197,94,0)" }}
@@ -58,7 +58,7 @@ export function QuestionTicker() {
             : { boxShadow: ["0 0 0px rgba(34,197,94,0)", "0 0 22px rgba(34,197,94,0.55)", "0 0 10px rgba(34,197,94,0.25)"] }
         }
         transition={{ duration: 1.1, ease: "easeOut" }}
-        className="flex max-w-md items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5"
+        className="flex min-w-0 max-w-[9.5rem] items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-2.5 py-1 sm:max-w-xs sm:gap-2 sm:px-4 sm:py-1.5 md:max-w-md"
       >
         <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-green-400" />
         <AnimatePresence mode="wait">
@@ -68,7 +68,7 @@ export function QuestionTicker() {
             animate={{ opacity: 1, y: 0 }}
             exit={reduced ? { opacity: 0 } : { opacity: 0, y: -4 }}
             transition={{ duration: reduced ? 0.15 : 0.4, ease: "easeInOut" }}
-            className="select-none truncate font-mono text-xs font-medium tracking-tight text-green-300"
+            className="min-w-0 flex-1 select-none truncate font-mono text-[10px] font-medium tracking-tight text-green-300 sm:text-xs"
           >
             {questions[index]}
           </motion.p>

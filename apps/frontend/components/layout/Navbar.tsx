@@ -55,24 +55,31 @@ export function Navbar({
           ))}
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3 md:ml-0">
+        <div className="flex shrink-0 items-center gap-3">
           <span className="hidden rounded-md border border-green-500/30 bg-green-500/10 px-3 py-1 text-xs text-green-400 sm:inline-flex">
             {settings.open_status}
           </span>
           {github ? (
-            <Link href={github.url} aria-label="GitHub" className="hidden rounded-md border border-slate-700/60 bg-slate-900 p-2 text-slate-400 hover:border-green-500/40 hover:text-green-400 sm:inline-flex">
+            <motion.a
+              href={github.url}
+              aria-label="GitHub"
+              whileTap={{ scale: 0.88 }}
+              whileHover={{ scale: 1.05 }}
+              className="hidden rounded-md border border-slate-700/60 bg-slate-900 p-2 text-slate-400 transition-colors hover:border-green-500/40 hover:text-green-400 active:border-green-500/60 active:bg-green-500/10 active:text-green-400 sm:inline-flex"
+            >
               <Github className="h-4 w-4" />
-            </Link>
+            </motion.a>
           ) : null}
-          <button
+          <motion.button
             type="button"
             onClick={() => setOpen((value) => !value)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700/60 bg-slate-900 text-slate-300 shadow-sm md:hidden"
+            whileTap={{ scale: 0.88 }}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-700/60 bg-slate-900 text-slate-300 shadow-sm transition-colors active:border-green-500/50 active:bg-green-500/10 active:text-green-400 md:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
+          </motion.button>
         </div>
       </nav>
 
@@ -92,11 +99,15 @@ export function Navbar({
               className="grid gap-1"
             >
               {navItems.map((item) => (
-                <motion.div key={item.href} variants={{ hidden: { opacity: 0, y: -8 }, visible: { opacity: 1, y: 0 } }}>
+                <motion.div
+                  key={item.href}
+                  variants={{ hidden: { opacity: 0, y: -8 }, visible: { opacity: 1, y: 0 } }}
+                  whileTap={{ scale: 0.97 }}
+                >
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-semibold text-slate-300 hover:bg-green-500/10 hover:text-green-400"
+                    className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-semibold text-slate-300 transition-colors hover:bg-green-500/10 hover:text-green-400 active:bg-green-500/15 active:text-green-400"
                   >
                     {item.label}
                     <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
@@ -104,14 +115,17 @@ export function Navbar({
                 </motion.div>
               ))}
               {github ? (
-                <motion.div variants={{ hidden: { opacity: 0, y: -8 }, visible: { opacity: 1, y: 0 } }}>
-                  <Link
+                <motion.div
+                  variants={{ hidden: { opacity: 0, y: -8 }, visible: { opacity: 1, y: 0 } }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <a
                     href={github.url}
                     onClick={() => setOpen(false)}
-                    className="mt-1 flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-3 text-sm font-semibold text-slate-300 hover:border-green-500/30 hover:bg-green-500/10 hover:text-green-400"
+                    className="mt-1 flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-3 text-sm font-semibold text-slate-300 transition-colors hover:border-green-500/30 hover:bg-green-500/10 hover:text-green-400 active:border-green-500/40 active:bg-green-500/15 active:text-green-400"
                   >
                     <Github className="h-4 w-4" /> GitHub
-                  </Link>
+                  </a>
                 </motion.div>
               ) : null}
             </motion.div>
@@ -124,9 +138,11 @@ export function Navbar({
 
 function DesktopNavLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link href={href} className="group relative py-2 hover:text-green-400">
-      {children}
-      <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-green-500 via-blue-500 to-violet-500 transition-transform duration-200 group-hover:scale-x-100" />
-    </Link>
+    <motion.div whileTap={{ scale: 0.93 }}>
+      <Link href={href} className="group relative inline-block rounded-md px-1 py-2 transition-colors hover:text-green-400 active:text-green-300">
+        {children}
+        <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-green-500 via-blue-500 to-violet-500 transition-transform duration-200 group-hover:scale-x-100 group-active:scale-x-100" />
+      </Link>
+    </motion.div>
   );
 }
