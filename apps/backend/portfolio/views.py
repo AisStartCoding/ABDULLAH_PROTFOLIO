@@ -11,6 +11,7 @@ from .models import (
     ArchitectureBlueprint,
     ArchitectureModule,
     ArchitectureRelationship,
+    Certificate,
     ContactMessage,
     Experience,
     ExperienceBullet,
@@ -29,6 +30,7 @@ from .models import (
 from .serializers import (
     AnimationSettingsSerializer,
     ArchitectureBlueprintSerializer,
+    CertificateSerializer,
     ContactMessageSerializer,
     ExperienceSerializer,
     StudioArchitectureApiGroupSerializer,
@@ -153,6 +155,11 @@ class AnimationSettingsViewSet(StudioModelViewSet):
     serializer_class = AnimationSettingsSerializer
 
 
+class CertificateViewSet(StudioModelViewSet):
+    queryset = Certificate.objects.all()
+    serializer_class = CertificateSerializer
+
+
 class SocialLinkViewSet(StudioModelViewSet):
     queryset = SocialLink.objects.all()
     serializer_class = SocialLinkSerializer
@@ -193,6 +200,7 @@ def portfolio_home(request):
             many=True,
         ).data,
         "tech_stack": TechStackItemSerializer(TechStackItem.objects.filter(is_active=True), many=True).data,
+        "certificates": CertificateSerializer(Certificate.objects.filter(is_active=True), many=True).data,
         "theme": ThemeSettingsSerializer(theme).data if theme else None,
         "animation": AnimationSettingsSerializer(animation).data if animation else None,
         "social_links": SocialLinkSerializer(SocialLink.objects.filter(is_active=True), many=True).data,

@@ -22,6 +22,7 @@ router.register("studio/architecture-relationships", views.ArchitectureRelations
 router.register("studio/tech-stack", views.TechStackItemViewSet)
 router.register("studio/theme", views.ThemeSettingsViewSet)
 router.register("studio/animation", views.AnimationSettingsViewSet)
+router.register("studio/certificates", views.CertificateViewSet)
 router.register("studio/social-links", views.SocialLinkViewSet)
 router.register("studio/contact-messages", views.ContactMessageViewSet)
 

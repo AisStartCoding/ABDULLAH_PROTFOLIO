@@ -6,6 +6,7 @@ from .models import (
     ArchitectureBlueprint,
     ArchitectureModule,
     ArchitectureRelationship,
+    Certificate,
     ContactMessage,
     Experience,
     ExperienceBullet,
@@ -133,6 +134,12 @@ class AnimationSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnimationSettings
         fields = "__all__"
+
+
+class CertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = ("id", "title", "issuer", "category", "description", "completed_at", "credential_url", "order")
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):

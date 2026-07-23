@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Briefcase, X } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Chip } from "@/components/ui/Chip";
 import type { Experience, SiteSettings, SkillCategory } from "@/types/portfolio";
@@ -135,13 +136,13 @@ export function ProfileAvatar({
                 </div>
               ) : null}
 
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 onClick={() => setOpen(false)}
                 className="mt-4 block rounded-md border border-green-500/30 bg-green-500/10 px-3 py-2 text-center text-xs font-semibold text-green-400 hover:bg-green-500/20"
               >
                 Get in touch
-              </a>
+              </Link>
             </motion.div>
           </>
         ) : null}

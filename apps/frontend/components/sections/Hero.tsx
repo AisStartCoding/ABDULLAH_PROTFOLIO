@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Database, Server, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 import { useRef } from "react";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { TerminalPanel } from "@/components/ui/TerminalPanel";
@@ -139,10 +140,10 @@ export function Hero({
             variants={entrance}
             className="mt-8 flex flex-wrap gap-3"
           >
-            <GlowButton href="#projects">{hero.primary_button}</GlowButton>
-            <GlowButton href="#pipeline" variant="secondary">{hero.secondary_button}</GlowButton>
-            <GlowButton href="#architecture" variant="secondary">{hero.architecture_button}</GlowButton>
-            <GlowButton href="#contact" variant="secondary">{hero.contact_button}</GlowButton>
+            <GlowButton href="/projects">{hero.primary_button}</GlowButton>
+            <GlowButton href="/architecture" variant="secondary">{hero.secondary_button}</GlowButton>
+            <GlowButton href="/architecture" variant="secondary">{hero.architecture_button}</GlowButton>
+            <GlowButton href="/contact" variant="secondary">{hero.contact_button}</GlowButton>
           </motion.div>
           <motion.div
             initial="hidden"
@@ -163,6 +164,25 @@ export function Hero({
           variants={entrance}
           className="relative z-10"
         >
+          <div className="pointer-events-none absolute inset-x-0 -top-16 -z-10 flex justify-center opacity-90 md:-top-24">
+            <Tilt3D maxTilt={4} className="w-56 md:w-72">
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/20 blur-3xl"
+                />
+                <Image
+                  src="/avatar-portrait.webp"
+                  alt="Illustrated portrait of Abdullah Ibna Siddiquie"
+                  width={700}
+                  height={1400}
+                  priority
+                  className="h-auto w-full select-none drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)]"
+                  draggable={false}
+                />
+              </div>
+            </Tilt3D>
+          </div>
           <div className="card-glow mb-4 rounded-lg border border-slate-700/60 bg-slate-900/88 p-4 shadow-glow">
             <div className="mb-3 flex items-center justify-between">
               <span className="text-xs uppercase tracking-[0.18em] text-slate-400">Delivery confidence</span>

@@ -199,6 +199,18 @@ class ContactMessage(models.Model):
         return f"{self.name}: {self.subject}"
 
 
+class Certificate(OrderedModel):
+    title = models.CharField(max_length=180)
+    issuer = models.CharField(max_length=160, blank=True)
+    category = models.CharField(max_length=80, default="Backend")
+    description = models.TextField(blank=True)
+    completed_at = models.DateField(null=True, blank=True)
+    credential_url = models.URLField(blank=True)
+
+    def __str__(self) -> str:
+        return self.title
+
+
 class SocialLink(OrderedModel):
     label = models.CharField(max_length=80)
     url = models.URLField()

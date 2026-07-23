@@ -6,6 +6,7 @@ from .models import (
     ArchitectureBlueprint,
     ArchitectureModule,
     ArchitectureRelationship,
+    Certificate,
     ContactMessage,
     Experience,
     ExperienceBullet,
@@ -83,6 +84,12 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "subject", "created_at", "is_read")
     list_filter = ("is_read", "created_at")
     readonly_fields = ("created_at",)
+
+
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ("title", "issuer", "category", "completed_at", "order", "is_active")
+    list_filter = ("category", "is_active")
 
 
 admin.site.register(SiteSettings)
