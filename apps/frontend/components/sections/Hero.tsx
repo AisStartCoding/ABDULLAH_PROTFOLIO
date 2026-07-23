@@ -5,6 +5,8 @@ import { Database, Server, ShieldCheck } from "lucide-react";
 import { useRef } from "react";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { TerminalPanel } from "@/components/ui/TerminalPanel";
+import { Tilt3D } from "@/components/ui/Tilt3D";
+import TextType from "@/components/text/TextType";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
 import type { HeroContent, SiteSettings } from "@/types/portfolio";
@@ -87,7 +89,7 @@ export function Hero({
             variants={entrance}
             className="mb-5 inline-flex rounded-md border border-green-500/30 bg-slate-900/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-green-400 shadow-sm"
           >
-            Production backend engineer
+            Production full-stack engineer
           </motion.div>
           <motion.h1
             ref={headlineRef}
@@ -97,7 +99,19 @@ export function Hero({
             variants={entrance}
             className="max-w-4xl text-4xl font-semibold leading-tight text-slate-50 md:text-6xl lg:text-7xl"
           >
-            {settings.name}
+            <Tilt3D maxTilt={6} className="inline-block">
+              <TextType
+                as="span"
+                text={settings.name}
+                typingSpeed={55}
+                initialDelay={300}
+                loop={false}
+                showCursor
+                cursorCharacter="_"
+                cursorClassName="text-electric-blue"
+                className="text-3d inline-block"
+              />
+            </Tilt3D>
           </motion.h1>
           <motion.p
             initial="hidden"

@@ -9,7 +9,7 @@ export function Skills({ categories }: { categories: SkillCategory[] }) {
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Core systems"
-          title="Backend, API, and infrastructure toolkit"
+          title="Full-stack, API, and infrastructure toolkit"
           description="A focused stack for building APIs, data models, deployment workflows, and stable production environments."
         />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

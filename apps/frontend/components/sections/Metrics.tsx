@@ -9,7 +9,7 @@ export function Metrics({ metrics }: { metrics: Metric[] }) {
         <SectionHeader
           eyebrow="Operational impact"
           title="Production numbers that matter"
-          description="The portfolio highlights deployment reliability, server uptime, backend speed, and practical release automation."
+          description="The portfolio highlights deployment reliability, server uptime, full-stack performance, and practical release automation."
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {metrics.map((metric, index) => <MetricCard key={metric.id} metric={metric} index={index} />)}

@@ -43,7 +43,14 @@ const nextConfig = {
     "http://127.0.0.1:3001",
     "http://localhost:3000",
     "http://localhost:3001"
-  ]
+  ],
+  webpack: (config) => {
+    // face-api.js optionally supports a Node.js environment (unused here —
+    // GridScan only ever loads it client-side); stub the Node-only `fs`
+    // module so webpack doesn't warn trying to resolve it for the browser.
+    config.resolve.fallback = { ...config.resolve.fallback, fs: false, encoding: false };
+    return config;
+  }
 };
 
 export default nextConfig;

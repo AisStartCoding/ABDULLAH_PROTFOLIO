@@ -20,119 +20,51 @@ export function Pipeline({ steps }: { steps: PipelineStep[] }) {
       if (!sectionRef.current || !progressLineRef.current) return;
       if (steps.length === 0) return;
 
-      const mm = gsap.matchMedia();
+      // Non-pinned, non-scroll-hijacking reveal for every viewport and motion
+      // preference: pinning this section previously froze scroll for 1.5
+      // viewport-heights while only badge glows changed, which read as a
+      // "blank page" bug. Everything here scrolls naturally.
+      const badges = badgeRefs.current.filter(Boolean) as HTMLSpanElement[];
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      const logs = logRefs.current.filter(Boolean) as HTMLDivElement[];
 
-      mm.add(
-        {
-          reducedOrMobile: "(prefers-reduced-motion: reduce), (max-width: 767px)",
-          full: "(prefers-reduced-motion: no-preference) and (min-width: 768px)"
-        },
-        (context) => {
-          const { reducedOrMobile } = context.conditions as { reducedOrMobile: boolean };
+      gsap.set(progressLineRef.current, { scaleY: 1 });
 
-          const badges = badgeRefs.current.filter(Boolean) as HTMLSpanElement[];
-          const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
-          const logs = logRefs.current.filter(Boolean) as HTMLDivElement[];
-
-          if (reducedOrMobile) {
-            // Simple, non-pinned sequential reveal — no scroll hijacking.
-            gsap.set(progressLineRef.current, { scaleY: 1 });
-            badges.forEach((badge, index) => {
-              gsap.fromTo(
-                badge,
-                { boxShadow: "0 0 0 rgba(34,197,94,0)" },
-                {
-                  boxShadow: "0 0 18px rgba(34,197,94,0.55)",
-                  borderColor: "rgba(34,197,94,0.9)",
-                  duration: MOTION.enter.duration,
-                  ease: MOTION.enter.ease,
-                  scrollTrigger: {
-                    trigger: cards[index] ?? badge,
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                  }
-                }
-              );
-            });
-            logs.forEach((log, index) => {
-              gsap.fromTo(
-                log,
-                { opacity: 0.35, borderColor: "rgba(51,65,85,0.6)" },
-                {
-                  opacity: 1,
-                  borderColor: "rgba(34,197,94,0.6)",
-                  duration: MOTION.enter.duration,
-                  ease: MOTION.enter.ease,
-                  scrollTrigger: {
-                    trigger: cards[index] ?? log,
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                  }
-                }
-              );
-            });
-
-            return () => {
-              // gsap.matchMedia cleans up its own scroll triggers on revert
-            };
-          }
-
-          gsap.set(progressLineRef.current, { scaleY: 0, transformOrigin: "top" });
-          gsap.set(badges, { boxShadow: "0 0 0 rgba(34,197,94,0)", borderColor: "rgba(34,197,94,0.3)" });
-          gsap.set(logs, { opacity: 0.35, borderColor: "rgba(51,65,85,0.6)" });
-
-          const tl = gsap.timeline({
+      badges.forEach((badge, index) => {
+        gsap.fromTo(
+          badge,
+          { boxShadow: "0 0 0 rgba(34,197,94,0)" },
+          {
+            boxShadow: "0 0 18px rgba(34,197,94,0.55)",
+            borderColor: "rgba(34,197,94,0.9)",
+            duration: MOTION.enter.duration,
+            ease: MOTION.enter.ease,
             scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top top",
-              end: "+=150%",
-              scrub: MOTION.scrub,
-              pin: true
+              trigger: cards[index] ?? badge,
+              start: "top 80%",
+              toggleActions: "play none none reverse"
             }
-          });
+          }
+        );
+      });
 
-          tl.to(progressLineRef.current, { scaleY: 1, ease: "none" }, 0);
-
-          steps.forEach((_, index) => {
-            const position = index / steps.length;
-            const badge = badges[index];
-            const log = logs[index];
-
-            if (badge) {
-              tl.to(
-                badge,
-                {
-                  boxShadow: "0 0 18px rgba(34,197,94,0.6)",
-                  borderColor: "rgba(34,197,94,0.9)",
-                  scale: 1.08,
-                  ease: "none"
-                },
-                position
-              ).to(
-                badge,
-                { scale: 1, ease: "none" },
-                position + 0.5 / steps.length
-              );
+      logs.forEach((log, index) => {
+        gsap.fromTo(
+          log,
+          { opacity: 0.35, borderColor: "rgba(51,65,85,0.6)" },
+          {
+            opacity: 1,
+            borderColor: "rgba(34,197,94,0.6)",
+            duration: MOTION.enter.duration,
+            ease: MOTION.enter.ease,
+            scrollTrigger: {
+              trigger: cards[index] ?? log,
+              start: "top 80%",
+              toggleActions: "play none none reverse"
             }
-
-            if (log) {
-              tl.to(
-                log,
-                {
-                  opacity: 1,
-                  borderColor: "rgba(34,197,94,0.6)",
-                  ease: "none"
-                },
-                position
-              );
-            }
-          });
-
-          return () => tl.scrollTrigger?.kill();
-        }
-      );
-
-      return () => mm.revert();
+          }
+        );
+      });
     },
     { scope: sectionRef, dependencies: [steps] }
   );

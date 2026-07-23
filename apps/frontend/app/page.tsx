@@ -12,11 +12,11 @@ import { Skills } from "@/components/sections/Skills";
 import { TechStack } from "@/components/sections/TechStack";
 import { getPortfolioHome } from "@/lib/api";
 
-const CommandScene = dynamic(() => import("@/components/three/CommandScene").then((mod) => mod.CommandScene), {
+const GridScan = dynamic(() => import("@/components/effects/GridScan").then((mod) => mod.GridScan), {
   ssr: false
 });
 
-const Lightfall = dynamic(() => import("@/components/effects/Lightfall").then((mod) => mod.Lightfall), {
+const CodeField = dynamic(() => import("@/components/effects/CodeField").then((mod) => mod.CodeField), {
   ssr: false
 });
 
@@ -24,25 +24,27 @@ export default async function Home() {
   const data = await getPortfolioHome();
 
   return (
-    <main className="relative min-h-screen bg-[#020617]">
-      <div className="pointer-events-none fixed inset-0 -z-10 opacity-40">
-        <Lightfall
-          colors={["#22c55e", "#3b82f6", "#8b5cf6"]}
-          backgroundColor="#020617"
-          speed={0.35}
-          streakCount={3}
-          streakWidth={0.8}
-          streakLength={1.1}
-          glow={0.8}
-          density={0.4}
-          twinkle={0.6}
-          zoom={3.2}
-          backgroundGlow={0.35}
-          opacity={0.6}
-          mouseInteraction={false}
+    <main className="relative min-h-screen">
+      <div className="fixed inset-0 -z-20 opacity-60">
+        <GridScan
+          linesColor="#2a2e35"
+          scanColor="#00d1ff"
+          gridScale={0.14}
+          lineThickness={1}
+          lineJitter={0.06}
+          scanOpacity={0.5}
+          scanGlow={0.55}
+          scanDirection="pingpong"
+          scanDuration={2.4}
+          scanDelay={2.6}
+          enablePost
+          bloomIntensity={0.35}
+          chromaticAberration={0.0012}
+          noiseIntensity={0.008}
+          sensitivity={0.5}
         />
       </div>
-      <CommandScene categories={data.skill_categories.map((category) => category.title)} />
+      <CodeField />
       <div className="relative z-10">
         <Navbar
           settings={data.settings}

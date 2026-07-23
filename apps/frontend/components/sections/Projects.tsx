@@ -9,7 +9,7 @@ export function Projects({ projects }: { projects: Project[] }) {
         <SectionHeader
           eyebrow="System modules"
           title="Featured production projects"
-          description="Practical backend and infrastructure work presented as proof of planning, shipping, and production ownership."
+          description="Practical full-stack and infrastructure work presented as proof of planning, shipping, and production ownership."
         />
         <div className="grid gap-5 md:grid-cols-2">
           {projects.map((project) => (

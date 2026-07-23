@@ -10,7 +10,7 @@ export function ExperienceSnapshot({ experiences }: { experiences: Experience[] 
         <SectionHeader
           eyebrow="Production role"
           title="Experience snapshot"
-          description="A concise view of backend delivery, deployment ownership, infrastructure work, and production reliability."
+          description="A concise view of full-stack delivery, deployment ownership, infrastructure work, and production reliability."
         />
         {experiences.map((experience) => (
           <CommandCard key={experience.id}>

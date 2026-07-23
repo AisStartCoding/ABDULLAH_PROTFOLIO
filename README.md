@@ -1,12 +1,22 @@
 # Abdullah Portfolio
 
-A light, animated backend engineering portfolio for Abdullah Ibna Siddiquie. The project combines a Next.js App Router frontend with a Django REST Framework backend, PostgreSQL-ready data models, a custom private `/studio` admin panel, Docker/Nginx deployment assets, and CI/CD documentation.
+A dark, animated full-stack engineering portfolio for Abdullah Ibna Siddiquie. The project combines a Next.js App Router frontend with a Django REST Framework backend, PostgreSQL-ready data models, a custom private `/studio` admin panel, Docker/Nginx deployment assets, and CI/CD documentation. The portfolio content itself also documents the wider production stack Abdullah builds with (see "Stack Represented" below).
 
-## Stack
+## Stack (this repo)
 
-- Frontend: Next.js, TypeScript, Tailwind CSS, Framer Motion, lucide-react
+- Frontend: Next.js, TypeScript, Tailwind CSS, Framer Motion, react-three-fiber, lucide-react
 - Backend: Django, Django REST Framework, Django sessions, PostgreSQL-ready settings
 - Deployment: Docker Compose, Gunicorn, Nginx, GitHub Actions
+
+## Stack Represented (portfolio content, not run in this repo)
+
+Showcased via tech-stack/architecture-blueprint content in `/api/portfolio/home/` and `/studio`:
+
+- Async & real-time: Redis, Celery, Django Channels (WebSockets), HMAC-signed webhooks
+- Services & micro-frontends: Node.js/Express, React + Vite
+- Cloud & scalability: AWS S3, CloudFront CDN, horizontal scaling, rate limiting, zero-downtime deploys
+
+See `docs/architecture.md` for details.
 
 ## Local Setup
 

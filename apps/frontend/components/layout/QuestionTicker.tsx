@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Short, rhetorical, DevOps/backend-engineer-voiced questions — cycles one at a
+// Short, rhetorical, full-stack/DevOps-voiced questions — cycles one at a
 // time in the navbar so it stays visible and highlighted on every page/scroll
 // position, instead of being buried behind section content.
 const questions = [
@@ -16,7 +16,9 @@ const questions = [
   "What happens when the queue backs up?",
   "Could you redeploy this in under a minute?",
   "Is that secret really out of git history?",
-  "How fast does your healthcheck catch a bad deploy?"
+  "How fast does your healthcheck catch a bad deploy?",
+  "Does your UI stay responsive under load?",
+  "Is that API contract actually typed end-to-end?"
 ];
 
 function useReducedMotion() {

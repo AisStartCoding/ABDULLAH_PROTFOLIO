@@ -48,16 +48,16 @@ const caseStudies: Record<string, Omit<ProjectCaseStudyStage, "id">[]> = {
 export const fallbackPortfolio: PortfolioHome = {
   settings: {
     name: "Abdullah Ibna Siddiquie",
-    role: "Backend Engineer | Python / Django / DevOps",
+    role: "Full-Stack Engineer | Django & Next.js | DevOps",
     email: "abdullahibnasiddiquie12688@gmail.com",
     location: "Dhaka, Bangladesh",
     open_status: "Open to Remote",
-    seo_title: "Abdullah Ibna Siddiquie | Backend Engineer & DevOps Builder",
-    seo_description: "Backend engineering portfolio for Django, APIs, PostgreSQL, CI/CD, Docker, Nginx, SaaS, and healthcare architecture."
+    seo_title: "Abdullah Ibna Siddiquie | Full-Stack Engineer & DevOps Builder",
+    seo_description: "Full-stack engineering portfolio spanning Django/DRF backends, Next.js/React frontends, PostgreSQL, CI/CD, Docker, Nginx, SaaS, and healthcare architecture."
   },
   hero: {
-    headline: "Backend systems, APIs, and deployments built for real products.",
-    subtext: "I build Django backends, REST APIs, database structures, CI/CD pipelines, and VPS production infrastructure for SaaS, healthcare, booking, and business platforms.",
+    headline: "Full-stack systems, interfaces, and deployments built for real products.",
+    subtext: "I build Django backends, Next.js/React frontends, REST APIs, database structures, CI/CD pipelines, and VPS production infrastructure for SaaS, healthcare, booking, and business platforms.",
     primary_button: "View Projects",
     secondary_button: "See Deployment Workflow",
     architecture_button: "Architecture Lab",
@@ -68,25 +68,28 @@ export const fallbackPortfolio: PortfolioHome = {
   metrics: [
     { id: 1, value: "40%", label: "Deployment Efficiency", description: "via CI/CD automation", order: 0 },
     { id: 2, value: "30%", label: "Server Downtime Cut", description: "with Nginx configuration", order: 1 },
-    { id: 3, value: "25%", label: "Application Speed Boost", description: "via backend optimization", order: 2 },
+    { id: 3, value: "25%", label: "Application Speed Boost", description: "via full-stack optimization", order: 2 },
     { id: 4, value: "<1 min", label: "Zero-Downtime Deploy", description: "on every production push", order: 3 }
   ],
   skill_categories: [
-    { id: 1, title: "Backend", order: 0, skills: ["Python", "Django", "FastAPI", "Flask"].map((name, index) => ({ id: index + 1, name, order: index })) },
-    { id: 2, title: "APIs & Database", order: 1, skills: ["REST API", "PostgreSQL", "SQL", "RBAC", "Auth"].map((name, index) => ({ id: index + 10, name, order: index })) },
-    { id: 3, title: "DevOps & Infra", order: 2, skills: ["Docker", "Nginx", "Gunicorn", "CI/CD", "GitHub Actions", "VPS", "Linux", "SSH"].map((name, index) => ({ id: index + 20, name, order: index })) },
-    { id: 4, title: "Security", order: 3, skills: ["Firewall", "HTTPS/SSL", "UFW", "server hardening"].map((name, index) => ({ id: index + 30, name, order: index })) },
-    { id: 5, title: "Frontend Integration", order: 4, skills: ["React", "Next.js", "API Integration"].map((name, index) => ({ id: index + 40, name, order: index })) }
+    { id: 1, title: "Backend", order: 0, skills: ["Python", "Django", "FastAPI", "Flask", "Celery", "Django Channels"].map((name, index) => ({ id: index + 1, name, order: index })) },
+    { id: 2, title: "Frontend", order: 1, skills: ["React", "Next.js", "TypeScript", "Vite", "Tailwind CSS", "REST/API Integration"].map((name, index) => ({ id: index + 6, name, order: index })) },
+    { id: 3, title: "APIs & Database", order: 2, skills: ["REST API", "PostgreSQL", "SQL", "RBAC", "Auth", "Webhooks", "WebSockets"].map((name, index) => ({ id: index + 10, name, order: index })) },
+    { id: 4, title: "Async & Caching", order: 3, skills: ["Redis", "Celery Workers", "Pub/Sub", "Task Queues", "Cache Invalidation"].map((name, index) => ({ id: index + 15, name, order: index })) },
+    { id: 5, title: "DevOps & Infra", order: 4, skills: ["Docker", "Nginx", "Gunicorn", "CI/CD", "GitHub Actions", "VPS", "Linux", "SSH"].map((name, index) => ({ id: index + 20, name, order: index })) },
+    { id: 6, title: "Cloud & Scalability", order: 5, skills: ["AWS S3", "CloudFront CDN", "Horizontal Scaling", "Load Balancing", "Rate Limiting"].map((name, index) => ({ id: index + 28, name, order: index })) },
+    { id: 7, title: "Security", order: 6, skills: ["Firewall", "HTTPS/SSL", "UFW", "server hardening"].map((name, index) => ({ id: index + 30, name, order: index })) },
+    { id: 8, title: "Node Services", order: 7, skills: ["Node.js", "Express"].map((name, index) => ({ id: index + 40, name, order: index })) }
   ],
   experiences: [
     {
       id: 1,
-      title: "DevOps & Backend Engineer",
+      title: "Full-Stack & DevOps Engineer",
       company: "Logic Gate Software Solutions BD",
       date: "Oct 2025 - Present",
       location: "Dhaka, Bangladesh",
       bullets: [
-        "Deployed SaaS, eCommerce, and travel platforms end-to-end in production",
+        "Built and deployed SaaS, eCommerce, and travel platforms end-to-end: Django/DRF APIs, React/Next.js frontends, and production infrastructure",
         "Built CI/CD pipelines with GitHub Actions to VPS",
         "Containerized services with Docker and configured Nginx + SSL + domain routing",
         "Led incident recovery, malware cleanup, and server hardening",
@@ -136,10 +139,24 @@ export const fallbackPortfolio: PortfolioHome = {
       modules: ["Patient Profiles", "Doctor Profiles", "Moderator Role", "Appointment Booking", "Live Consultation", "Prescription Management", "Medical Records", "Payment System", "Notifications", "Operations Console", "Audit & Security Logs"].map((name, index) => ({ id: index + 20, name, order: index })),
       api_groups: ["/api/auth/", "/api/patients/", "/api/doctors/", "/api/moderators/", "/api/appointments/", "/api/consultations/", "/api/prescriptions/", "/api/medical-records/", "/api/payments/", "/api/notifications/", "/api/ops/"].map((path, index) => ({ id: index + 20, path, order: index })),
       relationships: [["User", "PatientProfile", "extends"], ["User", "DoctorProfile", "extends"], ["User", "ModeratorProfile", "extends"], ["Patient", "Appointment", "books"], ["Appointment", "Consultation", "opens"], ["Consultation", "Prescription", "generates"], ["Patient", "MedicalRecord", "owns"], ["Appointment", "Payment", "charges"], ["System", "AuditLog", "records"]].map(([source, target, label], index) => ({ id: index + 20, source, target, label, order: index }))
+    },
+    {
+      id: 3,
+      title: "Scalable Real-Time Platform Blueprint",
+      description: "A horizontally scalable, event-driven architecture combining Django, async workers, websockets, a Node.js service, and a CDN-fronted edge for high-throughput production traffic.",
+      accent: "#7c3aed",
+      modules: ["Django API (DRF)", "Celery Workers", "Redis (cache/broker/pub-sub)", "Django Channels (WebSockets)", "Webhook Dispatcher (HMAC-signed)", "Node.js/Express Service", "React + Vite Micro-Frontend", "Nginx Reverse Proxy", "CloudFront CDN", "AWS S3 (media/static)"].map((name, index) => ({ id: index + 40, name, order: index })),
+      api_groups: ["/api/portfolio/", "/api/webhooks/", "/ws/analytics/", "/gateway/health", "/gateway/webhook"].map((path, index) => ({ id: index + 40, path, order: index })),
+      relationships: [["Client", "CDN", "cached"], ["CDN", "Nginx", "origin"], ["Nginx", "Django API", "routes"], ["Nginx", "Node.js Service", "routes"], ["Django API", "Redis", "caches"], ["Django API", "Celery Workers", "queues"], ["Celery Workers", "Webhook Dispatcher", "delivers"], ["Django Channels", "Redis", "pub/sub"], ["Client", "Django Channels", "subscribes"], ["Django API", "AWS S3", "stores"]].map(([source, target, label], index) => ({ id: index + 40, source, target, label, order: index }))
     }
   ],
-  tech_stack: ["Next.js", "TypeScript", "Django", "DRF", "PostgreSQL", "Docker", "Nginx", "Gunicorn", "GitHub Actions", "Linux"].map((name, index) => ({ id: index + 1, name, category: "Production Stack", icon: "" })),
-  theme: { primary: "#2563eb", secondary: "#059669", violet: "#7c3aed", background: "#f8fbff" },
+  tech_stack: [
+    ...["Next.js", "TypeScript", "Django", "DRF", "PostgreSQL", "Docker", "Nginx", "Gunicorn", "GitHub Actions", "Linux"].map((name, index) => ({ id: index + 1, name, category: "Production Stack", icon: "" })),
+    ...["Redis", "Celery", "Django Channels", "WebSockets", "Webhooks (HMAC-signed)"].map((name, index) => ({ id: index + 20, name, category: "Async & Real-Time", icon: "" })),
+    ...["Node.js", "Express", "React", "Vite"].map((name, index) => ({ id: index + 30, name, category: "Services & Micro-Frontends", icon: "" })),
+    ...["AWS S3", "CloudFront CDN", "Horizontal Scaling", "Rate Limiting", "Zero-Downtime Deploys"].map((name, index) => ({ id: index + 40, name, category: "Cloud & Scalability", icon: "" }))
+  ],
+  theme: { primary: "#3b82f6", secondary: "#22c55e", violet: "#8b5cf6", background: "#020617" },
   animation: { intensity: 0.75, speed: 0.7, enable_3d: false, enable_particles: false },
   social_links: [
     { id: 1, label: "GitHub", url: "https://github.com/AisStartCoding" },

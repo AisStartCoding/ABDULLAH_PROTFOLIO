@@ -36,8 +36,18 @@ Studio access uses Django session authentication and is restricted to username `
 
 ## Frontend
 
-The public frontend renders a light, animated, image-free portfolio. The `/studio` route provides a private dashboard for editing content through protected API calls with credentials and CSRF tokens.
+The public frontend renders a dark, animated, image-free command-center portfolio. The `/studio` route provides a private dashboard for editing content through protected API calls with credentials and CSRF tokens.
 
 ## Data Strategy
 
 Seed data creates Abdullah's initial portfolio. The `ensure_owner_user` management command creates or updates the private owner account from `PORTFOLIO_OWNER_PASSWORD`.
+
+## Broader Stack Represented in the Portfolio Content
+
+The tech-stack, skills, and architecture-blueprint content (seeded via `seed_portfolio`) documents the wider production stack Abdullah has real experience with, beyond what this repo runs directly:
+
+- **Async & real-time**: Redis, Celery (task queues, retries, scheduled jobs), Django Channels (WebSockets), HMAC-signed webhooks
+- **Services & micro-frontends**: Node.js/Express services, React + Vite micro-frontends
+- **Cloud & scalability**: AWS S3 + CloudFront CDN, horizontal scaling, rate limiting, zero-downtime deploys
+
+These are represented as a dedicated "Scalable Real-Time Platform Blueprint" (`ArchitectureBlueprint`) and tech-stack categories in the API payload/`/studio` content, not as running services in this repository — this repo's actual runtime remains Django + DRF + Postgres + Next.js + Docker + Nginx, as described above.
