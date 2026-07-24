@@ -36,33 +36,6 @@ export const ZONE_CLASSES: Record<Zone, string> = {
 
 export const HOME_OBJECTS: HomeObjectConfig[] = [
   {
-    // Renders in the corner-zone layer like every other object now — no
-    // longer anchored behind the character's portrait. Placed on the right
-    // side specifically, since the portrait sits in the left column and a
-    // left-side zone would still read as "behind the character."
-    id: "devops",
-    src: "/images/home-objects/devops-infinity.webp",
-    alt: "",
-    size: "large",
-    zone: "top-right",
-    holdSeconds: 6.5,
-    aspect: 1322 / 633,
-    // Large + wide (2:1 aspect) — disabled on mobile like the other "large"
-    // objects (workstation/backend) so it never crowds the hero text column
-    // on narrow screens.
-    mobileEnabled: false
-  },
-  {
-    id: "portal",
-    src: "/images/home-objects/nextjs-portal.webp",
-    alt: "",
-    size: "small",
-    zone: "top-left",
-    holdSeconds: 5,
-    aspect: 1,
-    mobileEnabled: true
-  },
-  {
     id: "python",
     src: "/images/home-objects/python-core-cube.webp",
     alt: "",
@@ -140,12 +113,12 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
 // Deterministic showcase order. A secondary (paired) object may appear
 // alongside the primary one — never two "large" objects together, and
 // never more than two objects at once. Django and Infrastructure lead so
-// they're what's visible on the very first page load.
+// they're what's visible on the very first page load. devops-infinity and
+// nextjs-portal were dropped from the showcase entirely — they read as
+// cluttered/out of place next to the rest of the set.
 export const SHOWCASE_SEQUENCE = [
   "django",
   "infra",
-  "devops",
-  "portal",
   "python",
   "redis",
   "cloud",
@@ -153,13 +126,9 @@ export const SHOWCASE_SEQUENCE = [
   "backend"
 ];
 
-// devops(right) + portal(left), python(right) + redis(left),
-// cloud(left) + django(right), workstation(right) + infra(left) — every
-// pair spans opposite sides, and devops is deliberately kept off the left
-// side entirely so it never reads as sitting behind the character.
+// python(right) + redis(left), cloud(left) + django(right),
+// workstation(right) + infra(left) — every pair spans opposite sides.
 export const PAIR_WITH: Record<string, string | null> = {
-  devops: "portal",
-  portal: null,
   python: "redis",
   redis: null,
   cloud: "django",
