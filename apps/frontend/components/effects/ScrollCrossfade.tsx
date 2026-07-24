@@ -92,7 +92,7 @@ export function ScrollCrossfade({ sections }: { sections: ReactNode[] }) {
             ref={(el) => {
               layerRefs.current[i] = el;
             }}
-            className="absolute inset-0 overflow-y-auto bg-slate-950/95 px-4 py-10 sm:px-6 lg:px-8"
+            className="absolute inset-0 overflow-y-auto px-4 py-10 sm:px-6 lg:px-8"
           >
             <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col justify-center">{section}</div>
           </div>
