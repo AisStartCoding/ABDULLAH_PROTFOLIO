@@ -35,7 +35,9 @@ export function ArchitectureLab({ blueprints }: { blueprints: ArchitectureBluepr
                 <div>
                   <p className="mb-3 text-xs uppercase tracking-[0.18em] text-slate-400">API groups</p>
                   <div className="space-y-2 font-mono text-xs text-blue-400">
-                    {blueprint.api_groups.map((api) => <div key={api.id} className="rounded-md bg-blue-500/10 px-3 py-2">{api.path}</div>)}
+                    {blueprint.api_groups.map((api) => (
+                      <div key={api.id} className="cursor-target rounded-md bg-blue-500/10 px-3 py-2">{api.path}</div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -43,7 +45,10 @@ export function ArchitectureLab({ blueprints }: { blueprints: ArchitectureBluepr
                 <p className="mb-3 text-xs uppercase tracking-[0.18em] text-slate-400">Database relationships</p>
                 <div className="grid gap-2 text-sm text-slate-400">
                   {blueprint.relationships.map((relationship) => (
-                    <div key={relationship.id} className="flex items-center justify-between gap-3 rounded-md border border-slate-700/60 bg-slate-950/60 px-3 py-2">
+                    <div
+                      key={relationship.id}
+                      className="cursor-target flex items-center justify-between gap-3 rounded-md border border-slate-700/60 bg-slate-950/60 px-3 py-2"
+                    >
                       <span>{relationship.source}</span>
                       <span className="text-green-400">-&gt;</span>
                       <span>{relationship.target}</span>
