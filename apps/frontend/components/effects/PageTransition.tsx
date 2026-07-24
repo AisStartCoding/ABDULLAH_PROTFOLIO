@@ -8,8 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ScrollTrigger } from "@/lib/gsap";
-
-const ORDER = ["/", "/about", "/skills", "/projects", "/certificates", "/contact"];
+import { ROUTE_ORDER } from "@/lib/portfolio-routes";
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -76,8 +75,8 @@ export function PageTransition({ children }: { children: ReactNode }) {
   }, []);
 
   if (pathname !== prevPathRef.current) {
-    const prevIndex = ORDER.indexOf(prevPathRef.current);
-    const currIndex = ORDER.indexOf(pathname);
+    const prevIndex = ROUTE_ORDER.indexOf(prevPathRef.current as (typeof ROUTE_ORDER)[number]);
+    const currIndex = ROUTE_ORDER.indexOf(pathname as (typeof ROUTE_ORDER)[number]);
     directionRef.current = currIndex >= prevIndex ? 1 : -1;
     prevPathRef.current = pathname;
   }

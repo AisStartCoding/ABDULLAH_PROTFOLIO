@@ -9,6 +9,8 @@ import { Tilt3D } from "@/components/ui/Tilt3D";
 import TextType from "@/components/text/TextType";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
+import { getAdjacentRoutes } from "@/lib/portfolio-routes";
+import { useScrollAdvance } from "@/lib/useScrollAdvance";
 import { withBasePath } from "@/lib/utils";
 import type { HeroContent, SiteSettings } from "@/types/portfolio";
 
@@ -91,6 +93,13 @@ export function Hero({
   const cardsLayerRef = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
 
+  // COMPLETED state of Home's scene: true once the crossfade has fully
+  // resolved to cards (progress ~1). Only then does one more deliberate
+  // scroll hand off navigation to the next route — never mid-animation.
+  const sceneCompleteRef = useRef(false);
+  const { nextHref } = getAdjacentRoutes("/");
+  useScrollAdvance({ enabledRef: sceneCompleteRef, href: nextHref, direction: 1 });
+
   useGSAP(
     () => {
       if (reduced) return;
@@ -123,7 +132,10 @@ export function Hero({
           trigger: driver,
           start: "top top",
           end: "bottom bottom",
-          scrub: MOTION.scrub
+          scrub: MOTION.scrub,
+          onUpdate: (self) => {
+            sceneCompleteRef.current = self.progress >= 0.98;
+          }
         }
       });
 

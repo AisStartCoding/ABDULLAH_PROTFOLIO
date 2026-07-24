@@ -2,8 +2,8 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { getAdjacentRoutes } from "@/lib/portfolio-routes";
 
-const ORDER = ["/", "/about", "/skills", "/projects", "/certificates", "/contact"];
 const LABELS: Record<string, string> = {
   "/": "Home",
   "/about": "About",
@@ -16,9 +16,7 @@ const LABELS: Record<string, string> = {
 // Home is reachable from the real navbar's logo — this only handles
 // Previous/Next, left-middle and right-middle.
 export function PageNav({ current }: { current: string }) {
-  const index = ORDER.indexOf(current);
-  const prevHref = index > 0 ? ORDER[index - 1] : null;
-  const nextHref = index >= 0 && index < ORDER.length - 1 ? ORDER[index + 1] : null;
+  const { prevHref, nextHref } = getAdjacentRoutes(current);
 
   return (
     <nav aria-label="Page navigation">
