@@ -1,9 +1,7 @@
 "use client";
 
-// Renders the corner-zone objects from Home's 3D object showcase (everything
-// except "devops", which is anchored inside Portrait's own container so it
-// sits exactly behind the character — see Hero.tsx). Driven by the shared
-// useHomeObjectScheduler so both pieces stay in sync on the same clock.
+// Renders the corner-zone objects from Home's 3D object showcase. Driven by
+// the shared useHomeObjectScheduler so both this and Portrait stay in sync.
 import { AnimatePresence, motion } from "framer-motion";
 import { getHomeObject, objectTiming, ZONE_CLASSES, type ObjectSize } from "@/lib/homeObjectShowcase";
 import { withBasePath } from "@/lib/utils";
@@ -26,9 +24,9 @@ export function HomeObjectShowcase({
   reducedMotion: boolean;
 }) {
   const renderObject = (id: string | null, isPrimary: boolean) => {
-    if (!id || id === "devops") return null;
+    if (!id) return null;
     const obj = getHomeObject(id);
-    if (!obj || !obj.zone) return null;
+    if (!obj) return null;
     if (isMobile && !obj.mobileEnabled) return null;
 
     const enterX = isPrimary ? 40 : -30;

@@ -11,11 +11,7 @@ export type HomeObjectConfig = {
   src: string;
   alt: string;
   size: ObjectSize;
-  /** Absent for "devops" — it doesn't use the generic corner-zone layer at
-   * all. It's anchored directly inside the portrait's own container (see
-   * Portrait in Hero.tsx) so it's guaranteed to sit exactly behind the
-   * character rather than approximating that position from a sibling. */
-  zone?: Zone;
+  zone: Zone;
   holdSeconds: number;
   aspect: number;
   mobileEnabled: boolean;
@@ -40,10 +36,13 @@ export const ZONE_CLASSES: Record<Zone, string> = {
 
 export const HOME_OBJECTS: HomeObjectConfig[] = [
   {
+    // Renders in the corner-zone layer like every other object now — no
+    // longer anchored behind the character's portrait.
     id: "devops",
     src: "/images/home-objects/devops-infinity.webp",
     alt: "",
     size: "large",
+    zone: "mid-left",
     holdSeconds: 6.5,
     aspect: 1322 / 633,
     mobileEnabled: true
@@ -135,17 +134,18 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
 
 // Deterministic showcase order. A secondary (paired) object may appear
 // alongside the primary one — never two "large" objects together, and
-// never more than two objects at once.
+// never more than two objects at once. Django and Infrastructure lead so
+// they're what's visible on the very first page load.
 export const SHOWCASE_SEQUENCE = [
+  "django",
+  "infra",
   "devops",
   "portal",
   "python",
   "redis",
   "cloud",
   "workstation",
-  "backend",
-  "django",
-  "infra"
+  "backend"
 ];
 
 // devops(portrait/left side) + portal(right), python(right) + redis(left),

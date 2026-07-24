@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { HomeObjectShowcase } from "@/components/sections/HomeObjectShowcase";
 import { GlowButton } from "@/components/ui/GlowButton";
@@ -9,7 +9,6 @@ import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 import TextType from "@/components/text/TextType";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { getHomeObject, objectTiming } from "@/lib/homeObjectShowcase";
 import { MOTION } from "@/lib/motion";
 import { getAdjacentRoutes } from "@/lib/portfolio-routes";
 import { useHomeObjectScheduler } from "@/lib/useHomeObjectScheduler";
@@ -63,36 +62,37 @@ function HeroText({ hero, settings }: { hero: HeroContent; settings: SiteSetting
   );
 }
 
-function Portrait({ showDevops = false, reducedMotion = false }: { showDevops?: boolean; reducedMotion?: boolean }) {
-  const devops = getHomeObject("devops");
-
+function Portrait({ reducedMotion = false }: { reducedMotion?: boolean }) {
   return (
     <div className="relative z-10 ml-0 mr-auto flex w-full max-w-[15rem] justify-start lg:max-w-xs lg:-translate-x-12 xl:-translate-x-16">
       <Tilt3D maxTilt={4} globalTilt>
         <div className="relative">
-          <div aria-hidden className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/20 blur-3xl" />
-
-          {/* devops-infinity is anchored to this exact container — the same
-              box the portrait itself sits in — so it's guaranteed to appear
-              directly behind and centered on the character, instead of
-              approximating that position from a separate sibling element.
-              Placed before the portrait <Image> in DOM order (and with no
-              z-index of its own) so natural stacking keeps it behind it. */}
-          <AnimatePresence>
-            {showDevops && devops ? (
+          {/* Aura: layered glows breathing in and out behind the character,
+              plus a slow-rotating conic ring for a bit of "energy" sparkle —
+              purely decorative, disabled under reduced motion. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
+            <motion.div
+              className="absolute h-[85%] w-[85%] rounded-full bg-electric-blue/25 blur-3xl"
+              animate={reducedMotion ? undefined : { scale: [0.92, 1.08, 0.92], opacity: [0.55, 0.9, 0.55] }}
+              transition={reducedMotion ? undefined : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute h-[70%] w-[70%] rounded-full bg-green-400/20 blur-2xl"
+              animate={reducedMotion ? undefined : { scale: [1.05, 0.9, 1.05], opacity: [0.4, 0.75, 0.4] }}
+              transition={reducedMotion ? undefined : { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+            />
+            {!reducedMotion && (
               <motion.div
-                aria-hidden
-                className="absolute inset-[-20%] pointer-events-none sm:inset-[-24%]"
-                initial={reducedMotion ? false : { opacity: 0, scale: 0.82, y: 16 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={reducedMotion ? undefined : { opacity: 0, scale: 0.88, y: 10 }}
-                transition={{ duration: objectTiming.enterDuration }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={withBasePath(devops.src)} alt="" className="h-full w-full object-contain" draggable={false} />
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+                className="absolute h-[105%] w-[105%] rounded-full opacity-40"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0%, rgba(0,209,255,0.35) 20%, transparent 40%, rgba(34,197,94,0.3) 60%, transparent 80%, rgba(0,209,255,0.35) 100%)"
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+              />
+            )}
+          </div>
 
           <Image
             src={withBasePath("/avatar-portrait.webp")}
@@ -121,7 +121,6 @@ export function Hero({
   const cardsLayerRef = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
   const { primaryId, secondaryId, isMobile, advance } = useHomeObjectScheduler(reduced);
-  const showDevops = primaryId === "devops" || secondaryId === "devops";
 
   // Tapping/clicking empty background space advances the showcase to the
   // next object immediately instead of waiting out the current hold time —
@@ -256,7 +255,7 @@ export function Hero({
     return (
       <div className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[.85fr_1.15fr]">
-          <Portrait showDevops={showDevops} reducedMotion />
+          <Portrait reducedMotion />
           <div>
             <HeroText hero={hero} settings={settings} />
           </div>
@@ -289,7 +288,7 @@ export function Hero({
               instead of pushing it below the fold; from lg it splits into
               its own column as before. */}
           <div className="relative col-start-1 row-start-1 flex justify-center lg:static lg:col-auto lg:row-auto">
-            <Portrait showDevops={showDevops} />
+            <Portrait />
           </div>
 
           {/* Same on-screen slot, two layers crossfading via scroll. */}
