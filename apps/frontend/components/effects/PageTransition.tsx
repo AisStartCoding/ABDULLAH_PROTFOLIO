@@ -6,7 +6,7 @@
 // aware (Next = forward, Previous/Home = backward) based on page order.
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ScrollTrigger } from "@/lib/gsap";
 
 const ORDER = ["/", "/about", "/skills", "/projects", "/certificates", "/contact"];
@@ -56,6 +56,15 @@ export function PageTransition({ children }: { children: ReactNode }) {
     directionRef.current = currIndex >= prevIndex ? 1 : -1;
     prevPathRef.current = pathname;
   }
+
+  // Every page should open at the top, not wherever the user had scrolled to
+  // on the previous page — reset the instant the route changes (before the
+  // exit/enter animation even starts), rather than waiting for it to finish.
+  // This runs regardless of reduced-motion, since that path skips the
+  // AnimatePresence wrapper below entirely but still needs the reset.
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   // Home's Hero uses a scroll-driven crossfade whose ScrollTrigger positions
   // must match the current document layout. Since this is a client-side

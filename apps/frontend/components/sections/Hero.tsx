@@ -140,6 +140,37 @@ export function Hero({
     { scope: scrollDriverRef, dependencies: [reduced] }
   );
 
+  // On phones/tablets, seeing the full object → cards crossfade means a lot
+  // of manual scrolling. If the user hasn't scrolled or touched the page
+  // shortly after landing on it, auto-scroll through the crossfade once so
+  // the animation plays on its own — any real scroll/touch/key input cancels
+  // it immediately and hands control back.
+  useEffect(() => {
+    if (reduced || typeof window === "undefined" || window.innerWidth >= 1024) return;
+
+    let cancelled = false;
+    const cancel = () => {
+      cancelled = true;
+    };
+
+    const timer = window.setTimeout(() => {
+      if (cancelled) return;
+      const driver = scrollDriverRef.current;
+      if (!driver) return;
+      const rect = driver.getBoundingClientRect();
+      const target = window.scrollY + rect.bottom - window.innerHeight;
+      window.scrollTo({ top: target, behavior: "smooth" });
+    }, 1400);
+
+    const events: Array<keyof WindowEventMap> = ["wheel", "touchstart", "keydown", "pointerdown"];
+    events.forEach((event) => window.addEventListener(event, cancel, { passive: true, once: true }));
+
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach((event) => window.removeEventListener(event, cancel));
+    };
+  }, [reduced]);
+
   // Reduced motion: no scroll-jacked sticky/crossfade — just a normal,
   // fully-scrollable stack with both blocks reachable in document flow.
   if (reduced) {
