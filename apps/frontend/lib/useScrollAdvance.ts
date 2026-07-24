@@ -38,8 +38,8 @@ export function useScrollAdvance({
   enabledRef,
   href,
   direction = 1,
-  wheelThreshold = 120,
-  touchThreshold = 70,
+  wheelThreshold = 90,
+  touchThreshold = 55,
   cooldownMs = 700
 }: ScrollAdvanceParams) {
   const router = useRouter();
@@ -87,16 +87,32 @@ export function useScrollAdvance({
       accumRef.current = 0;
     };
 
+    // A discrete key press doesn't need threshold accumulation — it's
+    // already a single deliberate gesture. This also gives a guaranteed,
+    // deterministic way to navigate that doesn't depend on wheel-event
+    // quirks (trackpad inertia, OS-level rubber-banding, etc.).
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (isFormFieldActive() || isDialogOpen() || !enabledRef.current || lockRef.current) return;
+      const isForwardKey = e.key === "ArrowDown" || e.key === "PageDown";
+      const isBackwardKey = e.key === "ArrowUp" || e.key === "PageUp";
+      if ((direction === 1 && isForwardKey) || (direction === -1 && isBackwardKey)) {
+        e.preventDefault();
+        navigate();
+      }
+    };
+
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
 
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [enabledRef, href, direction, wheelThreshold, touchThreshold, cooldownMs, router]);
 }
