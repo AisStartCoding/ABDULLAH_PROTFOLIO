@@ -3,8 +3,17 @@
   isolation: isolate;
 }
 
-.als-3d-object {
+/* Outer element: owns placement in the scene and the one-time entrance
+   transform (driven by framer-motion). */
+.als-3d-slot {
   position: absolute;
+}
+
+/* Inner element: owns the never-ending CSS keyframe motion (float/spin/
+   pulse) — kept off the outer element so the two transforms never fight. */
+.als-3d-object {
+  height: 100%;
+  width: 100%;
   z-index: calc(var(--depth, 1) * 10);
   will-change: transform;
   pointer-events: none;
