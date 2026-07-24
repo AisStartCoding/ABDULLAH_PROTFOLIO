@@ -58,6 +58,23 @@ export function PageTransition({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // The most reliable fix: reset scroll the instant the user clicks an
+  // internal link — before React re-renders, before Next.js starts the
+  // route change, before any exit/enter animation. Every other reset here
+  // depends on some render/animation lifecycle timing lining up correctly;
+  // this one doesn't depend on any of that.
+  useEffect(() => {
+    const onClickCapture = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement)?.closest?.("a");
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href || !href.startsWith("/") || href.startsWith("//")) return;
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    };
+    document.addEventListener("click", onClickCapture, { capture: true });
+    return () => document.removeEventListener("click", onClickCapture, { capture: true });
+  }, []);
+
   if (pathname !== prevPathRef.current) {
     const prevIndex = ORDER.indexOf(prevPathRef.current);
     const currIndex = ORDER.indexOf(pathname);

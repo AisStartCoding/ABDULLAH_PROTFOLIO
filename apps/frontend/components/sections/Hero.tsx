@@ -146,13 +146,20 @@ export function Hero({
   // scrolling. If the user hasn't scrolled or touched the page shortly after
   // landing on it, auto-scroll through the crossfade once so the animation
   // plays on its own — any real scroll/touch/key input cancels it
-  // immediately and hands control back.
+  // immediately and hands control back. Driven by a manual rAF loop (not the
+  // browser's native "smooth" scroll) because native smooth-scroll duration
+  // is short and out of our control — it blew through the crossfade too
+  // fast to actually read the headline or watch the cards land. This
+  // version takes a deliberate ~6.5s so there's real time to read each
+  // state as it appears.
   useEffect(() => {
     if (reduced || typeof window === "undefined") return;
 
     let cancelled = false;
+    let rafId: number | null = null;
     const cancel = () => {
       cancelled = true;
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
 
     const timer = window.setTimeout(() => {
@@ -160,15 +167,32 @@ export function Hero({
       const driver = scrollDriverRef.current;
       if (!driver) return;
       const rect = driver.getBoundingClientRect();
-      const target = window.scrollY + rect.bottom - window.innerHeight;
-      window.scrollTo({ top: target, behavior: "smooth" });
-    }, 1400);
+      const startY = window.scrollY;
+      const targetY = startY + rect.bottom - window.innerHeight;
+      const distance = targetY - startY;
+      if (distance <= 0) return;
+
+      const duration = 6500;
+      const easeInOutQuad = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+      let startTime: number | null = null;
+
+      const step = (now: number) => {
+        if (cancelled) return;
+        if (startTime === null) startTime = now;
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        window.scrollTo({ top: startY + distance * easeInOutQuad(progress), left: 0, behavior: "instant" });
+        if (progress < 1) rafId = requestAnimationFrame(step);
+      };
+      rafId = requestAnimationFrame(step);
+    }, 2200);
 
     const events: Array<keyof WindowEventMap> = ["wheel", "touchstart", "keydown", "pointerdown"];
     events.forEach((event) => window.addEventListener(event, cancel, { passive: true, once: true }));
 
     return () => {
       window.clearTimeout(timer);
+      if (rafId !== null) cancelAnimationFrame(rafId);
       events.forEach((event) => window.removeEventListener(event, cancel));
     };
   }, [reduced]);
