@@ -41,7 +41,7 @@ export default async function ContactPage() {
           <CommandCard>
             <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-400">Direct contact</h3>
             <div className="mt-4 space-y-3 text-sm text-slate-300">
-              <a href={`mailto:${settings.email}`} className="flex items-center gap-2 hover:text-green-400">
+              <a href={`mailto:${settings.email}`} className="cursor-target flex items-center gap-2 hover:text-green-400">
                 <Mail className="h-4 w-4 text-blue-400" /> {settings.email}
               </a>
               <p className="flex items-center gap-2 text-slate-400">
@@ -56,7 +56,7 @@ export default async function ContactPage() {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="block text-sm font-semibold text-slate-300 hover:text-green-400"
+                    className="cursor-target block text-sm font-semibold text-slate-300 hover:text-green-400"
                   >
                     {link.label}
                   </a>

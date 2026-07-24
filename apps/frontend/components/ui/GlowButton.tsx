@@ -16,7 +16,7 @@ export function GlowButton({ href, children, variant = "primary" }: GlowButtonPr
   return (
     <Link
       href={href}
-      className={`inline-flex min-h-11 items-center justify-center rounded-md border px-5 text-sm font-semibold transition ${classes}`}
+      className={`cursor-target inline-flex min-h-11 items-center justify-center rounded-md border px-5 text-sm font-semibold transition ${classes}`}
     >
       {children}
     </Link>

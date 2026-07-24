@@ -62,8 +62,17 @@ export function PageTransition({ children }: { children: ReactNode }) {
   // exit/enter animation even starts), rather than waiting for it to finish.
   // This runs regardless of reduced-motion, since that path skips the
   // AnimatePresence wrapper below entirely but still needs the reset.
+  //
+  // `behavior: "instant"` is required here, not just `scrollTo(0, 0)` — the
+  // site sets `scroll-behavior: smooth` globally, which applies to every
+  // programmatic scrollTo call regardless of call signature. A smooth
+  // scroll-to-top from deep down a tall page (e.g. Home) was still
+  // mid-animation when the new, much shorter page's content swapped in;
+  // the browser then clamped the in-flight scroll position to the new
+  // (shorter) document's max scroll, landing at the bottom of the new page
+  // instead of the top.
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [pathname]);
 
   // Home's Hero uses a scroll-driven crossfade whose ScrollTrigger positions
@@ -75,7 +84,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
   // recompute once the new page's own GSAP contexts have had a chance to
   // register.
   const handleExitComplete = () => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     requestAnimationFrame(() => {
       requestAnimationFrame(() => ScrollTrigger.refresh());
     });

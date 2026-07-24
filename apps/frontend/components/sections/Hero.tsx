@@ -59,7 +59,7 @@ function HeroText({ hero, settings }: { hero: HeroContent; settings: SiteSetting
 
 function Portrait() {
   return (
-    <div className="relative z-10 mx-auto flex w-full max-w-xs justify-center lg:mx-0 lg:ml-0 lg:mr-auto lg:max-w-sm lg:-translate-x-12 xl:-translate-x-16">
+    <div className="relative z-10 ml-0 mr-auto flex w-full max-w-xs justify-start lg:max-w-sm lg:-translate-x-12 xl:-translate-x-16">
       <Tilt3D maxTilt={4} globalTilt>
         <div className="relative">
           <div aria-hidden className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/20 blur-3xl" />
@@ -105,8 +105,10 @@ export function Hero({
       // That made the scrub-based crossfade render already half-transitioned
       // (cards partially shown, headline gone) instead of its initial state.
       // Always start Home at the top so the timeline's scroll progress is
-      // computed correctly from 0.
-      window.scrollTo(0, 0);
+      // computed correctly from 0. Must be instant — the site's global
+      // scroll-behavior:smooth would otherwise animate this and could still
+      // be mid-scroll when layout settles, landing at the wrong position.
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       ScrollTrigger.refresh();
 
       const cards = gsap.utils.toArray<HTMLElement>(".nav-card", cardsLayer);
@@ -140,13 +142,13 @@ export function Hero({
     { scope: scrollDriverRef, dependencies: [reduced] }
   );
 
-  // On phones/tablets, seeing the full object → cards crossfade means a lot
-  // of manual scrolling. If the user hasn't scrolled or touched the page
-  // shortly after landing on it, auto-scroll through the crossfade once so
-  // the animation plays on its own — any real scroll/touch/key input cancels
-  // it immediately and hands control back.
+  // Seeing the full object → cards crossfade means a lot of manual
+  // scrolling. If the user hasn't scrolled or touched the page shortly after
+  // landing on it, auto-scroll through the crossfade once so the animation
+  // plays on its own — any real scroll/touch/key input cancels it
+  // immediately and hands control back.
   useEffect(() => {
-    if (reduced || typeof window === "undefined" || window.innerWidth >= 1024) return;
+    if (reduced || typeof window === "undefined") return;
 
     let cancelled = false;
     const cancel = () => {

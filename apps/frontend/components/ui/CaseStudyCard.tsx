@@ -32,7 +32,10 @@ export function CaseStudyCard({ project }: { project: Project }) {
         {project.tags.map((tag) => <Chip key={tag.id}>{tag.name}</Chip>)}
       </div>
       <div className="mt-6 flex gap-3 text-sm">
-        <a href="#architecture" className="rounded-md border border-blue-500/30 px-3 py-2 text-blue-400 hover:bg-blue-500/10">
+        <a
+          href="#architecture"
+          className="cursor-target rounded-md border border-blue-500/30 px-3 py-2 text-blue-400 hover:bg-blue-500/10"
+        >
           Architecture
         </a>
         {hasCaseStudy ? <CaseStudyDialog project={project} /> : null}
@@ -41,12 +44,15 @@ export function CaseStudyCard({ project }: { project: Project }) {
             href={project.detail_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40 hover:text-green-400"
+            className="cursor-target inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40 hover:text-green-400"
           >
             Live Site <ExternalLink className="h-3.5 w-3.5" />
           </a>
         ) : !hasCaseStudy ? (
-          <Link href="/contact" className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40">
+          <Link
+            href="/contact"
+            className="cursor-target inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40"
+          >
             View Details <ExternalLink className="h-3.5 w-3.5" />
           </Link>
         ) : null}
@@ -63,7 +69,7 @@ function CaseStudyDialog({ project }: { project: Project }) {
       <Dialog.Trigger asChild>
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 transition-colors hover:border-green-500/40 hover:text-green-400"
+          className="cursor-target inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 transition-colors hover:border-green-500/40 hover:text-green-400"
         >
           View Case Study <ExternalLink className="h-3.5 w-3.5" />
         </button>
@@ -82,7 +88,7 @@ function CaseStudyDialog({ project }: { project: Project }) {
                   href={project.detail_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-green-400 hover:text-green-300"
+                  className="cursor-target mt-3 inline-flex items-center gap-2 text-sm font-semibold text-green-400 hover:text-green-300"
                 >
                   Visit live site <ExternalLink className="h-3.5 w-3.5" />
                 </a>
@@ -92,7 +98,7 @@ function CaseStudyDialog({ project }: { project: Project }) {
               <button
                 type="button"
                 aria-label="Close case study"
-                className="rounded-md border border-slate-700/60 p-1.5 text-slate-400 hover:border-green-500/40 hover:text-green-400"
+                className="cursor-target rounded-md border border-slate-700/60 p-1.5 text-slate-400 hover:border-green-500/40 hover:text-green-400"
               >
                 <X className="h-4 w-4" />
               </button>

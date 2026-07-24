@@ -53,7 +53,7 @@ export function ContactForm() {
           <button
             type="button"
             onClick={() => setStatus("idle")}
-            className="mt-2 text-sm font-semibold text-blue-400 hover:text-blue-300"
+            className="cursor-target mt-2 text-sm font-semibold text-blue-400 hover:text-blue-300"
           >
             Send another message
           </button>
@@ -125,7 +125,7 @@ export function ContactForm() {
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-green-600 bg-green-600 px-5 text-sm font-semibold text-slate-950 shadow-[0_14px_34px_rgba(34,197,94,.25)] transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            className="cursor-target inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-green-600 bg-green-600 px-5 text-sm font-semibold text-slate-950 shadow-[0_14px_34px_rgba(34,197,94,.25)] transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             {status === "submitting" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {status === "submitting" ? "Sending…" : "Send message"}
