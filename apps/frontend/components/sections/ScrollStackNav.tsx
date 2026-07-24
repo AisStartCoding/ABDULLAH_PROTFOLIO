@@ -63,7 +63,7 @@ function NavCard({ card, compact, folderOpen }: { card: (typeof CARDS)[number]; 
       <Link
         href={card.href}
         className={`cursor-target flex ${
-          compact ? "h-24" : "h-28"
+          compact ? "min-h-24" : "min-h-28"
         } w-full items-center gap-3 rounded-2xl p-4 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue ${
           folderOpen ? "-translate-y-1" : ""
         }`}
@@ -73,7 +73,7 @@ function NavCard({ card, compact, folderOpen }: { card: (typeof CARDS)[number]; 
         </span>
         <div className="min-w-0">
           <h3 className="text-sm font-semibold text-white sm:text-base">{card.title}</h3>
-          <p className="truncate text-xs leading-5 text-white/70">{card.description}</p>
+          <p className="line-clamp-2 text-xs leading-5 text-white/70">{card.description}</p>
         </div>
       </Link>
     </BorderGlow>

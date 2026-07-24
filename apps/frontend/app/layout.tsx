@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
 import { PageTransition } from "@/components/effects/PageTransition";
 import { GlobalPageNav } from "@/components/ui/GlobalPageNav";
+import { ScrollHint } from "@/components/ui/ScrollHint";
 import { getPortfolioHome } from "@/lib/api";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               `position: fixed` descendants, which was making these buttons
               jump around relative to page content instead of the viewport. */}
           <GlobalPageNav />
+          <ScrollHint />
           <div className="pointer-events-none fixed inset-0 z-[60]">
             <MouseEffects />
           </div>
