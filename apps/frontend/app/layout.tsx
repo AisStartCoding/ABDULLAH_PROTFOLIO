@@ -3,17 +3,22 @@ import { JetBrains_Mono } from "next/font/google";
 import dynamic from "next/dynamic";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { PageTransition } from "@/components/effects/PageTransition";
+import { GlobalPageNav } from "@/components/ui/GlobalPageNav";
 import { getPortfolioHome } from "@/lib/api";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
-const GridScan = dynamic(() => import("@/components/effects/GridScan").then((mod) => mod.GridScan), {
+const GridScan = dynamic(() => import("@/components/effects/GridScan"), {
   ssr: false
 });
 
-const CodeField = dynamic(() => import("@/components/effects/CodeField").then((mod) => mod.CodeField), {
+const MouseEffects = dynamic(() => import("@/components/effects/MouseEffects"), {
+  ssr: false
+});
+
+const TargetCursor = dynamic(() => import("@/components/effects/TargetCursor"), {
   ssr: false
 });
 
@@ -29,26 +34,20 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en" className={cn("dark", "font-sans", jetbrainsMono.variable)}>
       <body className={`${jetbrainsMono.variable} font-sans`}>
         <div className="relative min-h-screen">
-          <div className="fixed inset-0 -z-20 opacity-60">
+          <div className="fixed inset-0 -z-20 opacity-80">
             <GridScan
-              linesColor="#2a2e35"
+              linesColor="#1c2333"
               scanColor="#00d1ff"
               gridScale={0.14}
               lineThickness={1}
-              lineJitter={0.06}
-              scanOpacity={0.5}
-              scanGlow={0.55}
-              scanDirection="pingpong"
-              scanDuration={2.4}
+              scanOpacity={0.45}
+              bloomIntensity={0.5}
+              chromaticAberration={0.0015}
+              noiseIntensity={0.006}
+              scanDuration={2.6}
               scanDelay={2.6}
-              enablePost
-              bloomIntensity={0.35}
-              chromaticAberration={0.0012}
-              noiseIntensity={0.008}
-              sensitivity={0.5}
             />
           </div>
-          <CodeField />
           <div className="relative z-10 flex min-h-screen flex-col">
             <Navbar
               settings={data.settings}
@@ -56,9 +55,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               skillCategories={data.skill_categories}
               experiences={data.experiences}
             />
-            <div className="flex-1">{children}</div>
-            <Footer settings={data.settings} socialLinks={data.social_links} />
+            <div className="flex-1">
+              <PageTransition>{children}</PageTransition>
+            </div>
           </div>
+          {/* Rendered outside PageTransition's transformed subtree — a CSS
+              transform on an ancestor redefines the containing block for
+              `position: fixed` descendants, which was making these buttons
+              jump around relative to page content instead of the viewport. */}
+          <GlobalPageNav />
+          <div className="pointer-events-none fixed inset-0 z-[60]">
+            <MouseEffects />
+          </div>
+          <TargetCursor targetSelector=".cursor-target" cursorColor="#00d1ff" cursorColorOnTarget="#22c55e" />
         </div>
       </body>
     </html>

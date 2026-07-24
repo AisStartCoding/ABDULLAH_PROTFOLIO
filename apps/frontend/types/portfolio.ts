@@ -4,6 +4,7 @@ export type SiteSettings = {
   email: string;
   location: string;
   open_status: string;
+  resume_pdf?: string | null;
   seo_title: string;
   seo_description: string;
 };
@@ -92,6 +93,17 @@ export type TechStackItem = {
   icon: string;
 };
 
+export type Certificate = {
+  id: number;
+  title: string;
+  issuer: string;
+  category: string;
+  description: string;
+  completed_at: string | null;
+  credential_url: string;
+  order: number;
+};
+
 export type ThemeSettings = {
   primary: string;
   secondary: string;
@@ -122,6 +134,7 @@ export type PortfolioHome = {
   pipeline_steps: PipelineStep[];
   architecture_blueprints: ArchitectureBlueprint[];
   tech_stack: TechStackItem[];
+  certificates: Certificate[];
   theme: ThemeSettings;
   animation: AnimationSettings;
   social_links: SocialLink[];

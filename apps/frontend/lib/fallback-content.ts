@@ -52,6 +52,7 @@ export const fallbackPortfolio: PortfolioHome = {
     email: "abdullahibnasiddiquie12688@gmail.com",
     location: "Dhaka, Bangladesh",
     open_status: "Open to Remote",
+    resume_pdf: null,
     seo_title: "Abdullah Ibna Siddiquie | Full-Stack Engineer & DevOps Builder",
     seo_description: "Full-stack engineering portfolio spanning Django/DRF backends, Next.js/React frontends, PostgreSQL, CI/CD, Docker, Nginx, SaaS, and healthcare architecture."
   },
@@ -156,6 +157,7 @@ export const fallbackPortfolio: PortfolioHome = {
     ...["Node.js", "Express", "React", "Vite"].map((name, index) => ({ id: index + 30, name, category: "Services & Micro-Frontends", icon: "" })),
     ...["AWS S3", "CloudFront CDN", "Horizontal Scaling", "Rate Limiting", "Zero-Downtime Deploys"].map((name, index) => ({ id: index + 40, name, category: "Cloud & Scalability", icon: "" }))
   ],
+  certificates: [],
   theme: { primary: "#3b82f6", secondary: "#22c55e", violet: "#8b5cf6", background: "#020617" },
   animation: { intensity: 0.75, speed: 0.7, enable_3d: false, enable_particles: false },
   social_links: [

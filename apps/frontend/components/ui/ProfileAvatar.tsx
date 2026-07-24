@@ -30,14 +30,15 @@ function AvatarImage({ name, size }: { name: string; size: number }) {
     );
   }
 
-  // Drop a real photo at apps/frontend/public/profile.jpg to replace this
-  // placeholder automatically — no code change needed.
+  // Nav-persistent avatar uses the backend 3D object (not the portrait —
+  // that's reserved for the homepage only) so every page reflects the same
+  // "systems" motif instead of a personal photo in the header.
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/profile.jpg`}
+      src="/objects/backend/parts/central-python-core.png"
       alt={name}
-      className="h-full w-full object-cover"
+      className="h-full w-full scale-125 object-contain"
       onError={() => setBroken(true)}
     />
   );

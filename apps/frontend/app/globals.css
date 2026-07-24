@@ -86,6 +86,44 @@ h3,
     0 4px 8px rgba(0, 0, 0, 0.45);
 }
 
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes orbit-left {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-8px, -6px); }
+  50% { transform: translate(0, -11px); }
+  75% { transform: translate(8px, -6px); }
+}
+
+@keyframes orbit-right {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(8px, -6px); }
+  50% { transform: translate(0, -11px); }
+  75% { transform: translate(-8px, -6px); }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tilt-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.motion-float-slow { animation: float-y 14s ease-in-out infinite; }
+.motion-float-medium { animation: float-y 9s ease-in-out infinite; }
+.motion-float-fast { animation: float-y 6s ease-in-out infinite; }
+.motion-orbit-left { animation: orbit-left 10s ease-in-out infinite; }
+.motion-orbit-right { animation: orbit-right 10s ease-in-out infinite; }
+.motion-rotate-slow { animation: rotate-slow 40s linear infinite; }
+.motion-tilt-left { animation: tilt-sway 8s ease-in-out infinite; }
+.motion-tilt-right { animation: tilt-sway 8s ease-in-out infinite reverse; }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

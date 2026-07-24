@@ -3,6 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { motion } from "framer-motion";
 import { Boxes, ExternalLink, X } from "lucide-react";
+import Link from "next/link";
 import { Chip } from "@/components/ui/Chip";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { MOTION } from "@/lib/motion";
@@ -45,9 +46,9 @@ export function CaseStudyCard({ project }: { project: Project }) {
             Live Site <ExternalLink className="h-3.5 w-3.5" />
           </a>
         ) : !hasCaseStudy ? (
-          <a href="#contact" className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40">
+          <Link href="/contact" className="inline-flex items-center gap-2 rounded-md border border-slate-700/60 px-3 py-2 text-slate-300 hover:border-green-500/40">
             View Details <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          </Link>
         ) : null}
       </div>
     </CommandCard>

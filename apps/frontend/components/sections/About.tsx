@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { CommandCard } from "@/components/ui/CommandCard";
+import { LayeredObject } from "@/components/ui/LayeredObject";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { HeroContent } from "@/types/portfolio";
 
@@ -15,12 +16,15 @@ const PRINCIPLES = [
 export function About({ hero }: { hero: HeroContent }) {
   return (
     <section className="px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl">
-        <SectionHeader
-          eyebrow="About"
-          title="I build systems that stay reliable"
-          description={hero.subtext}
-        />
+      <div className="mx-auto max-w-6xl">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
+          <SectionHeader
+            eyebrow="About"
+            title="I build systems that stay reliable"
+            description={hero.subtext}
+          />
+          <LayeredObject family="backend" className="hidden lg:block" />
+        </div>
         <div className="grid gap-4 md:grid-cols-2">
           {PRINCIPLES.map((principle) => (
             <CommandCard key={principle.title}>

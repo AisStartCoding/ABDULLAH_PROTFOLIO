@@ -45,9 +45,9 @@ const nextConfig = {
     "http://localhost:3001"
   ],
   webpack: (config) => {
-    // face-api.js optionally supports a Node.js environment (unused here —
-    // GridScan only ever loads it client-side); stub the Node-only `fs`
-    // module so webpack doesn't warn trying to resolve it for the browser.
+    // face-api.js (dynamically imported, only used when GridScan's opt-in
+    // enableWebcam is turned on) probes for Node's fs/encoding modules at
+    // bundle time even though they're never reached in the browser.
     config.resolve.fallback = { ...config.resolve.fallback, fs: false, encoding: false };
     return config;
   }

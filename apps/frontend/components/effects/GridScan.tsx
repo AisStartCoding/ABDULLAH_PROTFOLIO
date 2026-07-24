@@ -1,11 +1,10 @@
 "use client";
 
-// Vendored WebGL grid/scan background (React Bits "GridScan"). Internal
-// three.js uniform graphs and (optional) face-api.js detection results are
-// third-party plumbing — `any` is scoped to that internal machinery only,
-// not the component's public props API. face-api.js (a TensorFlow-based
-// face-tracking library) is dynamically imported only when `enableWebcam`
-// is actually turned on, so the default (mouse-only) usage never ships it.
+// GridScan — React Bits. Ported to TypeScript, recolored to the site's
+// electric-blue/violet palette. Webcam/face-tracking is opt-in only
+// (enableWebcam) — face-api.js models are never fetched unless a caller
+// explicitly turns that on, since the site uses this purely as a
+// cursor-reactive background grid.
 import { BloomEffect, ChromaticAberrationEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
@@ -276,6 +275,81 @@ void main(){
 }
 `;
 
+function srgbColor(hex: string) {
+  const c = new THREE.Color(hex);
+  return c.convertSRGBToLinear();
+}
+
+function smoothDampVec2(
+  current: THREE.Vector2,
+  target: THREE.Vector2,
+  currentVelocity: THREE.Vector2,
+  smoothTime: number,
+  maxSpeed: number,
+  deltaTime: number
+) {
+  const out = current.clone();
+  smoothTime = Math.max(0.0001, smoothTime);
+  const omega = 2 / smoothTime;
+  const x = omega * deltaTime;
+  const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+
+  let change = current.clone().sub(target);
+  const originalTo = target.clone();
+
+  const maxChange = maxSpeed * smoothTime;
+  if (change.length() > maxChange) change.setLength(maxChange);
+
+  target = current.clone().sub(change);
+  const temp = currentVelocity.clone().addScaledVector(change, omega).multiplyScalar(deltaTime);
+  currentVelocity.sub(temp.clone().multiplyScalar(omega));
+  currentVelocity.multiplyScalar(exp);
+
+  out.copy(target.clone().add(change.add(temp).multiplyScalar(exp)));
+
+  const origMinusCurrent = originalTo.clone().sub(current);
+  const outMinusOrig = out.clone().sub(originalTo);
+  if (origMinusCurrent.dot(outMinusOrig) > 0) {
+    out.copy(originalTo);
+    currentVelocity.set(0, 0);
+  }
+  return out;
+}
+
+function smoothDampFloat(
+  current: number,
+  target: number,
+  velRef: { v: number },
+  smoothTime: number,
+  maxSpeed: number,
+  deltaTime: number
+) {
+  smoothTime = Math.max(0.0001, smoothTime);
+  const omega = 2 / smoothTime;
+  const x = omega * deltaTime;
+  const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+
+  let change = current - target;
+  const originalTo = target;
+
+  const maxChange = maxSpeed * smoothTime;
+  change = Math.sign(change) * Math.min(Math.abs(change), maxChange);
+
+  target = current - change;
+  const temp = (velRef.v + omega * change) * deltaTime;
+  velRef.v = (velRef.v - omega * temp) * exp;
+
+  let out = target + (change + temp) * exp;
+
+  const origMinusCurrent = originalTo - current;
+  const outMinusOrig = out - originalTo;
+  if (origMinusCurrent * outMinusOrig > 0) {
+    out = originalTo;
+    velRef.v = 0;
+  }
+  return { value: out, v: velRef.v };
+}
+
 export type GridScanProps = {
   enableWebcam?: boolean;
   showPreview?: boolean;
@@ -307,134 +381,30 @@ export type GridScanProps = {
   style?: React.CSSProperties;
 };
 
-function srgbColor(hex: string) {
-  const c = new THREE.Color(hex);
-  return c.convertSRGBToLinear();
-}
-
-function smoothDampVec2(
-  current: THREE.Vector2,
-  target: THREE.Vector2,
-  currentVelocity: THREE.Vector2,
-  smoothTimeIn: number,
-  maxSpeed: number,
-  deltaTime: number
-) {
-  const out = current.clone();
-  const smoothTime = Math.max(0.0001, smoothTimeIn);
-  const omega = 2 / smoothTime;
-  const x = omega * deltaTime;
-  const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
-
-  let change = current.clone().sub(target);
-  const originalTo = target.clone();
-
-  const maxChange = maxSpeed * smoothTime;
-  if (change.length() > maxChange) change.setLength(maxChange);
-
-  const dampedTarget = current.clone().sub(change);
-  const temp = currentVelocity.clone().addScaledVector(change, omega).multiplyScalar(deltaTime);
-  currentVelocity.sub(temp.clone().multiplyScalar(omega));
-  currentVelocity.multiplyScalar(exp);
-
-  out.copy(dampedTarget.clone().add(change.add(temp).multiplyScalar(exp)));
-
-  const origMinusCurrent = originalTo.clone().sub(current);
-  const outMinusOrig = out.clone().sub(originalTo);
-  if (origMinusCurrent.dot(outMinusOrig) > 0) {
-    out.copy(originalTo);
-    currentVelocity.set(0, 0);
-  }
-  return out;
-}
-
-function smoothDampFloat(
-  current: number,
-  target: number,
-  velRef: { v: number },
-  smoothTimeIn: number,
-  maxSpeed: number,
-  deltaTime: number
-) {
-  const smoothTime = Math.max(0.0001, smoothTimeIn);
-  const omega = 2 / smoothTime;
-  const x = omega * deltaTime;
-  const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
-
-  let change = current - target;
-  const originalTo = target;
-
-  const maxChange = maxSpeed * smoothTime;
-  change = Math.sign(change) * Math.min(Math.abs(change), maxChange);
-
-  const dampedTarget = current - change;
-  const temp = (velRef.v + omega * change) * deltaTime;
-  velRef.v = (velRef.v - omega * temp) * exp;
-
-  let out = dampedTarget + (change + temp) * exp;
-
-  const origMinusCurrent = originalTo - current;
-  const outMinusOrig = out - originalTo;
-  if (origMinusCurrent * outMinusOrig > 0) {
-    out = originalTo;
-    velRef.v = 0;
-  }
-  return { value: out, v: velRef.v };
-}
-
-function medianPush(buf: number[], v: number, maxLen: number) {
-  buf.push(v);
-  if (buf.length > maxLen) buf.shift();
-}
-
-function median(buf: number[]) {
-  if (buf.length === 0) return 0;
-  const a = [...buf].sort((x, y) => x - y);
-  const mid = Math.floor(a.length / 2);
-  return a.length % 2 ? a[mid] : (a[mid - 1] + a[mid]) * 0.5;
-}
-
-function centroid(points: Array<{ x: number; y: number }>) {
-  let x = 0;
-  let y = 0;
-  const n = points.length || 1;
-  for (const p of points) {
-    x += p.x;
-    y += p.y;
-  }
-  return { x: x / n, y: y / n };
-}
-
-function dist2(a: { x: number; y: number }, b: { x: number; y: number }) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
-}
-
-const MAX_SCANS = 8;
-
-export function GridScan({
+export default function GridScan({
   enableWebcam = false,
   showPreview = false,
   modelsPath = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights",
   sensitivity = 0.55,
   lineThickness = 1,
-  linesColor = "#2F293A",
-  scanColor = "#FF9FFC",
+  linesColor = "#1c2333",
+  scanColor = "#00d1ff",
   scanOpacity = 0.4,
   gridScale = 0.1,
   lineStyle = "solid",
   lineJitter = 0.1,
   scanDirection = "pingpong",
   enablePost = true,
-  bloomIntensity = 0,
+  bloomIntensity = 0.5,
   bloomThreshold = 0,
   bloomSmoothing = 0,
-  chromaticAberration = 0.002,
-  noiseIntensity = 0.01,
+  chromaticAberration = 0.0015,
+  noiseIntensity = 0.008,
   scanGlow = 0.5,
   scanSoftness = 2,
   scanPhaseTaper = 0.9,
-  scanDuration = 2.0,
-  scanDelay = 2.0,
+  scanDuration = 2.4,
+  scanDelay = 2.4,
   enableGyro = false,
   scanOnClick = false,
   snapBackDelay = 250,
@@ -444,7 +414,6 @@ export function GridScan({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
   const bloomRef = useRef<BloomEffect | null>(null);
@@ -453,6 +422,7 @@ export function GridScan({
 
   const [modelsReady, setModelsReady] = useState(false);
   const [uiFaceActive, setUiFaceActive] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   const lookTarget = useRef(new THREE.Vector2(0, 0));
   const tiltTarget = useRef(0);
@@ -465,6 +435,7 @@ export function GridScan({
   const yawCurrent = useRef(0);
   const yawVel = useRef(0);
 
+  const MAX_SCANS = 8;
   const scanStartsRef = useRef<number[]>([]);
 
   const pushScan = (t: number) => {
@@ -481,24 +452,26 @@ export function GridScan({
     }
   };
 
-  const bufX = useRef<number[]>([]);
-  const bufY = useRef<number[]>([]);
-  const bufT = useRef<number[]>([]);
-  const bufYaw = useRef<number[]>([]);
-
   const s = THREE.MathUtils.clamp(sensitivity, 0, 1);
   const skewScale = THREE.MathUtils.lerp(0.06, 0.2, s);
   const tiltScale = THREE.MathUtils.lerp(0.12, 0.3, s);
   const yawScale = THREE.MathUtils.lerp(0.1, 0.28, s);
-  const depthResponse = THREE.MathUtils.lerp(0.25, 0.45, s);
   const smoothTime = THREE.MathUtils.lerp(0.45, 0.12, s);
   const maxSpeed = Infinity;
   const yBoost = THREE.MathUtils.lerp(1.2, 1.6, s);
 
   useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(query.matches);
+    const update = () => setReducedMotion(query.matches);
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
-    let leaveTimer: number | null = null;
+    if (!el || reducedMotion) return;
+    let leaveTimer: ReturnType<typeof setTimeout> | null = null;
     const onMove = (e: MouseEvent) => {
       if (uiFaceActive) return;
       if (leaveTimer) {
@@ -513,16 +486,6 @@ export function GridScan({
     const onClick = async () => {
       const nowSec = performance.now() / 1000;
       if (scanOnClick) pushScan(nowSec);
-      const DeviceOrientationEventCtor = window.DeviceOrientationEvent as unknown as {
-        requestPermission?: () => Promise<string>;
-      };
-      if (enableGyro && typeof window !== "undefined" && DeviceOrientationEventCtor?.requestPermission) {
-        try {
-          await DeviceOrientationEventCtor.requestPermission();
-        } catch {
-          // noop
-        }
-      }
     };
     const onEnter = () => {
       if (leaveTimer) {
@@ -533,7 +496,7 @@ export function GridScan({
     const onLeave = () => {
       if (uiFaceActive) return;
       if (leaveTimer) clearTimeout(leaveTimer);
-      leaveTimer = window.setTimeout(
+      leaveTimer = setTimeout(
         () => {
           lookTarget.current.set(0, 0);
           tiltTarget.current = 0;
@@ -542,25 +505,24 @@ export function GridScan({
         Math.max(0, snapBackDelay || 0)
       );
     };
-    el.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove);
     el.addEventListener("mouseenter", onEnter);
     if (scanOnClick) el.addEventListener("click", onClick);
     el.addEventListener("mouseleave", onLeave);
     return () => {
-      el.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousemove", onMove);
       el.removeEventListener("mouseenter", onEnter);
       el.removeEventListener("mouseleave", onLeave);
       if (scanOnClick) el.removeEventListener("click", onClick);
       if (leaveTimer) clearTimeout(leaveTimer);
     };
-  }, [uiFaceActive, snapBackDelay, scanOnClick, enableGyro]);
+  }, [uiFaceActive, snapBackDelay, scanOnClick, reducedMotion]);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || reducedMotion) return;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    rendererRef.current = renderer;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -692,8 +654,9 @@ export function GridScan({
       renderer.forceContextLoss();
       container.removeChild(renderer.domElement);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    reducedMotion,
+    maxSpeed,
     sensitivity,
     lineThickness,
     linesColor,
@@ -715,7 +678,6 @@ export function GridScan({
     bloomSmoothing,
     chromaticAberration,
     smoothTime,
-    maxSpeed,
     skewScale,
     yBoost,
     tiltScale,
@@ -723,7 +685,7 @@ export function GridScan({
   ]);
 
   useEffect(() => {
-    if (!enableGyro) return;
+    if (!enableGyro || reducedMotion) return;
     const handler = (e: DeviceOrientationEvent) => {
       if (uiFaceActive) return;
       const gamma = e.gamma ?? 0;
@@ -734,14 +696,9 @@ export function GridScan({
       tiltTarget.current = THREE.MathUtils.degToRad(gamma) * 0.4;
     };
     window.addEventListener("deviceorientation", handler);
-    return () => {
-      window.removeEventListener("deviceorientation", handler);
-    };
-  }, [enableGyro, uiFaceActive]);
+    return () => window.removeEventListener("deviceorientation", handler);
+  }, [enableGyro, uiFaceActive, reducedMotion]);
 
-  // Only pull in face-api.js (a sizeable TensorFlow-based library) when
-  // webcam face tracking is actually requested — the default (mouse/gyro
-  // driven) usage never downloads or runs it.
   useEffect(() => {
     if (!enableWebcam) return;
     let canceled = false;
@@ -764,15 +721,14 @@ export function GridScan({
   }, [enableWebcam, modelsPath]);
 
   useEffect(() => {
+    if (!enableWebcam || !modelsReady) return;
     let stop = false;
     let lastDetect = 0;
     const video = videoRef.current;
 
     const start = async () => {
-      if (!enableWebcam || !modelsReady || !video) return;
-
+      if (!video) return;
       const faceapi = await import("face-api.js");
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } },
@@ -788,72 +744,17 @@ export function GridScan({
 
       const detect = async (ts: number) => {
         if (stop) return;
-
         if (ts - lastDetect >= 33) {
           lastDetect = ts;
           try {
             const res = await faceapi.detectSingleFace(video, opts).withFaceLandmarks(true);
-            if (res && res.detection) {
-              const det = res.detection;
-              const box = det.box;
-              const vw = video.videoWidth || 1;
-              const vh = video.videoHeight || 1;
-
-              const cx = box.x + box.width * 0.5;
-              const cy = box.y + box.height * 0.5;
-              const nx = (cx / vw) * 2 - 1;
-              const ny = (cy / vh) * 2 - 1;
-              medianPush(bufX.current, nx, 5);
-              medianPush(bufY.current, ny, 5);
-              const nxm = median(bufX.current);
-              const nym = median(bufY.current);
-
-              const look = new THREE.Vector2(Math.tanh(nxm), Math.tanh(nym));
-
-              const faceSize = Math.min(1, Math.hypot(box.width / vw, box.height / vh));
-              const depthScale = 1 + depthResponse * (faceSize - 0.25);
-              lookTarget.current.copy(look.multiplyScalar(depthScale));
-
-              const leftEye = res.landmarks.getLeftEye();
-              const rightEye = res.landmarks.getRightEye();
-              const lc = centroid(leftEye);
-              const rc = centroid(rightEye);
-              const tilt = Math.atan2(rc.y - lc.y, rc.x - lc.x);
-              medianPush(bufT.current, tilt, 5);
-              tiltTarget.current = median(bufT.current);
-
-              const nose = res.landmarks.getNose();
-              const tip = nose[nose.length - 1] || nose[Math.floor(nose.length / 2)];
-              const jaw = res.landmarks.getJawOutline();
-              const leftCheek = jaw[3] || jaw[2];
-              const rightCheek = jaw[13] || jaw[14];
-              const dL = dist2(tip, leftCheek);
-              const dR = dist2(tip, rightCheek);
-              const eyeDist = Math.hypot(rc.x - lc.x, rc.y - lc.y) + 1e-6;
-              let yawSignal = THREE.MathUtils.clamp((dR - dL) / (eyeDist * 1.6), -1, 1);
-              yawSignal = Math.tanh(yawSignal);
-              medianPush(bufYaw.current, yawSignal, 5);
-              yawTarget.current = median(bufYaw.current);
-
-              setUiFaceActive(true);
-            } else {
-              setUiFaceActive(false);
-            }
+            setUiFaceActive(!!res);
           } catch {
             setUiFaceActive(false);
           }
         }
-
-        const videoWithRvfc = video as HTMLVideoElement & {
-          requestVideoFrameCallback?: (callback: () => void) => void;
-        };
-        if (videoWithRvfc.requestVideoFrameCallback) {
-          videoWithRvfc.requestVideoFrameCallback(() => detect(performance.now()));
-        } else {
-          requestAnimationFrame(detect);
-        }
+        requestAnimationFrame(detect);
       };
-
       requestAnimationFrame(detect);
     };
 
@@ -868,26 +769,18 @@ export function GridScan({
         video.srcObject = null;
       }
     };
-  }, [enableWebcam, modelsReady, depthResponse]);
+  }, [enableWebcam, modelsReady]);
 
   return (
     <div ref={containerRef} className={`gridscan${className ? ` ${className}` : ""}`} style={style}>
-      {showPreview && (
+      {enableWebcam && showPreview && (
         <div className="gridscan__preview">
           <video ref={videoRef} muted playsInline autoPlay className="gridscan__video" />
           <div className="gridscan__badge">
-            {enableWebcam
-              ? modelsReady
-                ? uiFaceActive
-                  ? "Face: tracking"
-                  : "Face: searching"
-                : "Loading models"
-              : "Webcam disabled"}
+            {modelsReady ? (uiFaceActive ? "Face: tracking" : "Face: searching") : "Loading models"}
           </div>
         </div>
       )}
     </div>
   );
 }
-
-export default GridScan;
