@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
@@ -61,6 +61,22 @@ function HeroText({ hero, settings }: { hero: HeroContent; settings: SiteSetting
 }
 
 function Portrait({ reducedMotion = false }: { reducedMotion?: boolean }) {
+  const controls = useAnimationControls();
+
+  // Same tap/click/touch shake reaction as the other pages' 3D objects —
+  // transform-only, so it never fights the Tilt3D pointer-tilt wrapper.
+  const handleTap = () => {
+    if (reducedMotion) return;
+    controls.stop();
+    controls
+      .start({
+        rotate: [0, -5, 4, -3, 2, 0],
+        y: [0, -10, 5, -3, 0],
+        transition: { duration: 0.65, ease: "easeInOut" }
+      })
+      .then(() => controls.start({ rotate: 0, y: 0, transition: { duration: 0.3 } }));
+  };
+
   return (
     <div className="relative z-10 ml-0 mr-auto flex w-full max-w-[15rem] justify-start lg:max-w-xs lg:-translate-x-12 xl:-translate-x-16">
       <Tilt3D maxTilt={4} globalTilt>
@@ -92,15 +108,22 @@ function Portrait({ reducedMotion = false }: { reducedMotion?: boolean }) {
             )}
           </div>
 
-          <Image
-            src={withBasePath("/avatar-portrait.webp")}
-            alt="Illustrated portrait of Abdullah Ibna Siddiquie"
-            width={700}
-            height={1400}
-            priority
-            className="relative h-[36vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[42vh] lg:h-auto lg:w-full"
-            draggable={false}
-          />
+          <motion.div
+            className="relative cursor-pointer outline-none [-webkit-tap-highlight-color:transparent]"
+            animate={controls}
+            onTap={handleTap}
+            whileTap={reducedMotion ? undefined : { scale: 0.97 }}
+          >
+            <Image
+              src={withBasePath("/avatar-portrait.webp")}
+              alt="Illustrated portrait of Abdullah Ibna Siddiquie"
+              width={700}
+              height={1400}
+              priority
+              className="relative h-[36vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[42vh] lg:h-auto lg:w-full"
+              draggable={false}
+            />
+          </motion.div>
 
           {/* Ground-contact shadow — a flattened, blurred ellipse under the
               character's feet, separate from the drop-shadow on the image

@@ -7,6 +7,13 @@
    transform (driven by framer-motion). */
 .als-3d-slot {
   position: absolute;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.als-3d-slot:focus,
+.als-3d-slot:focus-visible {
+  outline: none;
 }
 
 /* Inner element: owns the never-ending CSS keyframe motion (float/spin/
@@ -32,7 +39,14 @@
   pointer-events: auto;
   cursor: pointer;
   touch-action: manipulation;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
   transition: filter 250ms ease;
+}
+
+.als-3d-object.is-interactive img {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .als-3d-object.is-interactive:hover {
