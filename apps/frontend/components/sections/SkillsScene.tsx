@@ -21,6 +21,7 @@ export function SkillsScene({ className = "" }: { className?: string }) {
         duration={4.5}
         enterFrom="fade"
         enterDelay={0}
+        interactive
       />
       <FloatingAsset
         src="/als-3d/python-core-cube.webp"
@@ -29,6 +30,7 @@ export function SkillsScene({ className = "" }: { className?: string }) {
         duration={7}
         enterFrom="fade"
         enterDelay={0.05}
+        interactive
       />
       <FloatingAsset
         src="/als-3d/django-node.webp"
@@ -38,6 +40,7 @@ export function SkillsScene({ className = "" }: { className?: string }) {
         duration={5}
         enterFrom="left"
         enterDelay={0.4}
+        interactive
       />
       <FloatingAsset
         src="/als-3d/drf-api-node.webp"
@@ -47,6 +50,7 @@ export function SkillsScene({ className = "" }: { className?: string }) {
         duration={5.6}
         enterFrom="right"
         enterDelay={0.55}
+        interactive
       />
       <FloatingAsset
         src="/als-3d/postgresql-stack.webp"
@@ -56,6 +60,7 @@ export function SkillsScene({ className = "" }: { className?: string }) {
         duration={6.2}
         enterFrom="left"
         enterDelay={0.7}
+        interactive
       />
       <FloatingAsset
         src="/als-3d/redis-node.webp"
@@ -65,6 +70,7 @@ export function SkillsScene({ className = "" }: { className?: string }) {
         duration={5.3}
         enterFrom="right"
         enterDelay={0.85}
+        interactive
       />
     </div>
   );
