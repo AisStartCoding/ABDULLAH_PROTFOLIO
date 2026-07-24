@@ -37,22 +37,27 @@ export const ZONE_CLASSES: Record<Zone, string> = {
 export const HOME_OBJECTS: HomeObjectConfig[] = [
   {
     // Renders in the corner-zone layer like every other object now — no
-    // longer anchored behind the character's portrait.
+    // longer anchored behind the character's portrait. Placed on the right
+    // side specifically, since the portrait sits in the left column and a
+    // left-side zone would still read as "behind the character."
     id: "devops",
     src: "/images/home-objects/devops-infinity.webp",
     alt: "",
     size: "large",
-    zone: "mid-left",
+    zone: "top-right",
     holdSeconds: 6.5,
     aspect: 1322 / 633,
-    mobileEnabled: true
+    // Large + wide (2:1 aspect) — disabled on mobile like the other "large"
+    // objects (workstation/backend) so it never crowds the hero text column
+    // on narrow screens.
+    mobileEnabled: false
   },
   {
     id: "portal",
     src: "/images/home-objects/nextjs-portal.webp",
     alt: "",
     size: "small",
-    zone: "top-right",
+    zone: "top-left",
     holdSeconds: 5,
     aspect: 1,
     mobileEnabled: true
@@ -148,9 +153,10 @@ export const SHOWCASE_SEQUENCE = [
   "backend"
 ];
 
-// devops(portrait/left side) + portal(right), python(right) + redis(left),
+// devops(right) + portal(left), python(right) + redis(left),
 // cloud(left) + django(right), workstation(right) + infra(left) — every
-// pair spans opposite sides.
+// pair spans opposite sides, and devops is deliberately kept off the left
+// side entirely so it never reads as sitting behind the character.
 export const PAIR_WITH: Record<string, string | null> = {
   devops: "portal",
   portal: null,
