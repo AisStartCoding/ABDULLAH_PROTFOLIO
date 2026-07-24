@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { FloatingAsset } from "@/components/effects/FloatingAsset";
+import { HomeFloaters } from "@/components/sections/HomeFloaters";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
 import { Tilt3D } from "@/components/ui/Tilt3D";
@@ -60,7 +60,7 @@ function HeroText({ hero, settings }: { hero: HeroContent; settings: SiteSetting
 
 function Portrait() {
   return (
-    <div className="relative z-10 ml-0 mr-auto flex w-full max-w-xs justify-start lg:max-w-sm lg:-translate-x-12 xl:-translate-x-16">
+    <div className="relative z-10 ml-0 mr-auto flex w-full max-w-[15rem] justify-start lg:max-w-xs lg:-translate-x-12 xl:-translate-x-16">
       <Tilt3D maxTilt={4} globalTilt>
         <div className="relative">
           <div aria-hidden className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/20 blur-3xl" />
@@ -70,7 +70,7 @@ function Portrait() {
             width={700}
             height={1400}
             priority
-            className="h-[42vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[48vh] lg:h-auto lg:w-full"
+            className="h-[36vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[42vh] lg:h-auto lg:w-full"
             draggable={false}
           />
         </div>
@@ -220,15 +220,7 @@ export function Hero({
     <div ref={scrollDriverRef} className="relative h-[220vh]">
       <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="light-grid absolute inset-0 opacity-80" />
-        <div aria-hidden className="als-3d-scene absolute inset-0 z-0 hidden opacity-30 lg:block">
-          <FloatingAsset
-            src="/als-3d/particles-kit.webp"
-            className="right-[4%] top-[8%] h-[26vw] w-[26vw] max-h-72 max-w-72"
-            depth={1}
-            motion="particle-drift"
-            duration={8}
-          />
-        </div>
+        <HomeFloaters className="absolute inset-0 z-0 hidden lg:block" />
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[.85fr_1.15fr]">
           {/* Portrait: fixed in place for the entire scroll — never
               transformed by scroll position, only pointer-tilt. On mobile it
