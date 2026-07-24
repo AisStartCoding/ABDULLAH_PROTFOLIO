@@ -101,6 +101,15 @@ function Portrait({ reducedMotion = false }: { reducedMotion?: boolean }) {
             className="relative h-[36vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[42vh] lg:h-auto lg:w-full"
             draggable={false}
           />
+
+          {/* Ground-contact shadow — a flattened, blurred ellipse under the
+              character's feet, separate from the drop-shadow on the image
+              itself, so the portrait reads as sitting in 3D space rather
+              than a flat cutout floating on the background. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-[2%] left-1/2 h-[6%] w-[65%] -translate-x-1/2 rounded-[50%] bg-black/50 blur-md"
+          />
         </div>
       </Tilt3D>
     </div>
