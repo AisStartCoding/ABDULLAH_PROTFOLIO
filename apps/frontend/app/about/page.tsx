@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { About } from "@/components/sections/About";
 import { ExperienceSnapshot } from "@/components/sections/ExperienceSnapshot";
-import { ScrollCrossfade } from "@/components/effects/ScrollCrossfade";
 import { getPortfolioHome } from "@/lib/api";
 
 export const metadata: Metadata = {
@@ -12,8 +11,9 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const data = await getPortfolioHome();
   return (
-    <ScrollCrossfade
-      sections={[<About key="about" hero={data.hero} />, <ExperienceSnapshot key="experience" experiences={data.experiences} />]}
-    />
+    <div className="pt-24">
+      <About hero={data.hero} />
+      <ExperienceSnapshot experiences={data.experiences} />
+    </div>
   );
 }

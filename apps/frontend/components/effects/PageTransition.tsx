@@ -57,14 +57,14 @@ export function PageTransition({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname;
   }
 
-  // Each page's scroll-crossfade (Home's Hero, and every inner page's
-  // ScrollCrossfade) relies on ScrollTrigger positions matching the current
-  // document layout. Since this is a client-side route swap (not a full
-  // reload), ScrollTrigger doesn't know the DOM changed size/content on its
-  // own — without this, landing back on a page mid-scroll-position from the
-  // previous page showed a stale/half-scrolled crossfade state that upward
-  // scrolling couldn't correct. Reset scroll and recompute once the new
-  // page's own GSAP contexts have had a chance to register.
+  // Home's Hero uses a scroll-driven crossfade whose ScrollTrigger positions
+  // must match the current document layout. Since this is a client-side
+  // route swap (not a full reload), ScrollTrigger doesn't know the DOM
+  // changed size/content on its own — without this, landing back on Home
+  // mid-scroll-position from another page showed a stale/half-scrolled
+  // crossfade state that upward scrolling couldn't correct. Reset scroll and
+  // recompute once the new page's own GSAP contexts have had a chance to
+  // register.
   const handleExitComplete = () => {
     window.scrollTo(0, 0);
     requestAnimationFrame(() => {
