@@ -104,7 +104,7 @@ export function Pipeline({ steps }: { steps: PipelineStep[] }) {
                     ref={(el) => {
                       badgeRefs.current[index] = el;
                     }}
-                    className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-green-500/30 bg-slate-900 text-sm font-semibold text-green-400"
+                    className="cursor-target z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-green-500/30 bg-slate-900 text-sm font-semibold text-green-400"
                   >
                     {index + 1}
                   </span>
@@ -112,7 +112,7 @@ export function Pipeline({ steps }: { steps: PipelineStep[] }) {
                     ref={(el) => {
                       cardRefs.current[index] = el;
                     }}
-                    className="rounded-lg border border-slate-700/60 bg-slate-900 p-4"
+                    className="cursor-target rounded-lg border border-slate-700/60 bg-slate-900 p-4"
                   >
                     <h4 className="font-semibold text-slate-50">{step.title}</h4>
                     <p className="mt-1 text-sm text-slate-400">{step.description}</p>
@@ -133,7 +133,7 @@ export function Pipeline({ steps }: { steps: PipelineStep[] }) {
                   ref={(el) => {
                     logRefs.current[index] = el;
                   }}
-                  className="rounded-md border border-slate-700/60 bg-slate-900 p-3 text-slate-300"
+                  className="cursor-target rounded-md border border-slate-700/60 bg-slate-900 p-3 text-slate-300"
                 >
                   <span className="text-green-400">ok</span> {step.command || step.title}
                 </div>

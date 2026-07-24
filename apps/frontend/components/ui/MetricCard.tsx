@@ -11,7 +11,7 @@ export function MetricCard({ metric, index }: { metric: Metric; index: number })
       viewport={{ once: true, amount: 0.5 }}
       transition={{ delay: index * 0.08 }}
       whileHover={{ y: -5, scale: 1.01 }}
-      className="glass-panel card-glow rounded-lg p-5"
+      className="cursor-target glass-panel card-glow rounded-lg p-5"
     >
       <div className="text-3xl font-semibold text-green-400">{metric.value}</div>
       <div className="mt-3 text-sm font-semibold text-slate-50">{metric.label}</div>
