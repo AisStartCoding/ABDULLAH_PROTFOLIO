@@ -19,9 +19,12 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Deliberately NOT scroll-behavior: smooth here. A global CSS smooth-scroll
+   applies to every programmatic scrollTo call site-wide, including our
+   route-change reset — which raced against the new (shorter) page's content
+   swapping in and got clamped to the bottom of it. Any spot that wants a
+   smooth scroll (e.g. Home's idle auto-scroll) requests it explicitly via
+   the scrollTo options object, which works with or without this rule. */
 
 body {
   margin: 0;

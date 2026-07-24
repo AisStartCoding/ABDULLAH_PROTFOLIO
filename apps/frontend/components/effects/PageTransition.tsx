@@ -50,6 +50,14 @@ export function PageTransition({ children }: { children: ReactNode }) {
   const prevPathRef = useRef(pathname);
   const directionRef = useRef(1);
 
+  // Let us own scroll position entirely on route change instead of the
+  // browser trying to restore whatever offset a history entry had.
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
   if (pathname !== prevPathRef.current) {
     const prevIndex = ORDER.indexOf(prevPathRef.current);
     const currIndex = ORDER.indexOf(pathname);
@@ -63,16 +71,19 @@ export function PageTransition({ children }: { children: ReactNode }) {
   // This runs regardless of reduced-motion, since that path skips the
   // AnimatePresence wrapper below entirely but still needs the reset.
   //
-  // `behavior: "instant"` is required here, not just `scrollTo(0, 0)` — the
-  // site sets `scroll-behavior: smooth` globally, which applies to every
-  // programmatic scrollTo call regardless of call signature. A smooth
-  // scroll-to-top from deep down a tall page (e.g. Home) was still
-  // mid-animation when the new, much shorter page's content swapped in;
-  // the browser then clamped the in-flight scroll position to the new
-  // (shorter) document's max scroll, landing at the bottom of the new page
-  // instead of the top.
+  // `behavior: "instant"` bypasses any CSS scroll-behavior:smooth so this
+  // never animates — an animated reset was still mid-scroll when a shorter
+  // page's content swapped in, and the browser clamped the in-flight
+  // position to the new (shorter) document's max scroll, landing at the
+  // bottom instead of the top. Runs both immediately (before the exit
+  // animation starts) and once more after paint, in case anything async
+  // (images, fonts) grows the page and shifts scroll in between.
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(raf);
   }, [pathname]);
 
   // Home's Hero uses a scroll-driven crossfade whose ScrollTrigger positions
