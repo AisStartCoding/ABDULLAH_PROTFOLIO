@@ -1,12 +1,17 @@
 .als-3d-scene {
   position: relative;
   isolation: isolate;
+  border: none;
+  box-shadow: none;
 }
 
 /* Outer element: owns placement in the scene and the one-time entrance
-   transform (driven by framer-motion). */
+   transform (driven by framer-motion). No visible box of its own — ever —
+   just a positioning/interaction layer. */
 .als-3d-slot {
   position: absolute;
+  border: none;
+  box-shadow: none;
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -14,6 +19,7 @@
 .als-3d-slot:focus,
 .als-3d-slot:focus-visible {
   outline: none;
+  box-shadow: none;
 }
 
 /* Inner element: owns the never-ending CSS keyframe motion (float/spin/
@@ -24,6 +30,8 @@
   z-index: calc(var(--depth, 1) * 10);
   will-change: transform;
   pointer-events: none;
+  border: none;
+  box-shadow: none;
 }
 
 .als-3d-object img {
@@ -32,6 +40,9 @@
   object-fit: contain;
   display: block;
   user-select: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
   filter: drop-shadow(0 24px 30px rgba(0, 209, 255, 0.18));
 }
 
@@ -40,12 +51,16 @@
   cursor: pointer;
   touch-action: manipulation;
   outline: none;
+  border: none;
+  box-shadow: none;
   -webkit-tap-highlight-color: transparent;
   transition: filter 250ms ease;
 }
 
 .als-3d-object.is-interactive img {
   outline: none;
+  border: none;
+  box-shadow: none;
   -webkit-tap-highlight-color: transparent;
 }
 
