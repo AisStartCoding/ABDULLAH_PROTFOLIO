@@ -1,0 +1,94 @@
+.als-3d-scene {
+  position: relative;
+  isolation: isolate;
+}
+
+.als-3d-object {
+  position: absolute;
+  z-index: calc(var(--depth, 1) * 10);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.als-3d-object img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  filter: drop-shadow(0 24px 30px rgba(0, 209, 255, 0.18));
+}
+
+.als-3d-object.is-interactive {
+  pointer-events: auto;
+  transition: filter 250ms ease;
+}
+
+.als-3d-object.is-interactive:hover {
+  filter: brightness(1.12);
+}
+
+.als-motion-float {
+  animation: als-float var(--duration, 6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.als-motion-portal-spin {
+  animation: als-portal-spin 30s linear infinite;
+}
+
+.als-motion-connector-pulse {
+  animation: als-connector-pulse var(--duration, 4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.als-motion-particle-drift {
+  animation: als-particle-drift var(--duration, 8s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes als-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotateY(-3deg);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) rotateY(4deg);
+  }
+}
+
+@keyframes als-portal-spin {
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes als-connector-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    filter: brightness(0.9);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes als-particle-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(6px, -14px, 0);
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .als-3d-object {
+    animation: none !important;
+  }
+}

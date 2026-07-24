@@ -4,7 +4,7 @@ import { Award, ExternalLink } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Chip } from "@/components/ui/Chip";
 import { CommandCard } from "@/components/ui/CommandCard";
-import { LayeredObject } from "@/components/ui/LayeredObject";
+import { FloatingAsset } from "@/components/effects/FloatingAsset";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Certificate } from "@/types/portfolio";
 
@@ -20,7 +20,9 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
   return (
     <section className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20 lg:hidden">
-        <LayeredObject family="certificate" className="w-4/5 max-w-xs" />
+        <div className="als-3d-scene relative aspect-square w-4/5 max-w-xs">
+          <FloatingAsset src="/als-3d/nextjs-portal.webp" className="inset-0" depth={2} motion="portal-spin" />
+        </div>
       </div>
       <div className="relative z-10 mx-auto max-w-6xl">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
@@ -29,7 +31,9 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
             title="Learning that supports the work"
             description="Credentials, focused study, and continuous technical growth."
           />
-          <LayeredObject family="certificate" className="hidden lg:block" />
+          <div className="als-3d-scene relative hidden aspect-square lg:block">
+            <FloatingAsset src="/als-3d/nextjs-portal.webp" className="inset-0" depth={2} motion="portal-spin" interactive />
+          </div>
         </div>
 
         {certificates.length === 0 ? (

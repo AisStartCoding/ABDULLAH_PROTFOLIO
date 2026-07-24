@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { FloatingAsset } from "@/components/effects/FloatingAsset";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
 import { Tilt3D } from "@/components/ui/Tilt3D";
@@ -219,6 +220,15 @@ export function Hero({
     <div ref={scrollDriverRef} className="relative h-[220vh]">
       <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="light-grid absolute inset-0 opacity-80" />
+        <div aria-hidden className="als-3d-scene absolute inset-0 z-0 hidden opacity-30 lg:block">
+          <FloatingAsset
+            src="/als-3d/particles-kit.webp"
+            className="right-[4%] top-[8%] h-[26vw] w-[26vw] max-h-72 max-w-72"
+            depth={1}
+            motion="particle-drift"
+            duration={8}
+          />
+        </div>
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[.85fr_1.15fr]">
           {/* Portrait: fixed in place for the entire scroll — never
               transformed by scroll position, only pointer-tilt. On mobile it

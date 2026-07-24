@@ -1,5 +1,5 @@
 import { CommandCard } from "@/components/ui/CommandCard";
-import { LayeredObject } from "@/components/ui/LayeredObject";
+import { SkillsScene } from "@/components/sections/SkillsScene";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Chip } from "@/components/ui/Chip";
 import type { SkillCategory } from "@/types/portfolio";
@@ -8,7 +8,7 @@ export function Skills({ categories }: { categories: SkillCategory[] }) {
   return (
     <section id="skills" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20 lg:hidden">
-        <LayeredObject family="workstation" className="w-4/5 max-w-xs" />
+        <SkillsScene className="aspect-square w-4/5 max-w-xs" />
       </div>
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
@@ -17,7 +17,7 @@ export function Skills({ categories }: { categories: SkillCategory[] }) {
             title="Full-stack, API, and infrastructure toolkit"
             description="A focused stack for building APIs, data models, deployment workflows, and stable production environments."
           />
-          <LayeredObject family="workstation" className="hidden lg:block" />
+          <SkillsScene className="hidden aspect-square lg:block" />
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (

@@ -1,6 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { CommandCard } from "@/components/ui/CommandCard";
-import { LayeredObject } from "@/components/ui/LayeredObject";
+import { FloatingAsset } from "@/components/effects/FloatingAsset";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { HeroContent } from "@/types/portfolio";
 
@@ -17,7 +17,9 @@ export function About({ hero }: { hero: HeroContent }) {
   return (
     <section className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20 lg:hidden">
-        <LayeredObject family="backend" className="w-4/5 max-w-xs" />
+        <div className="als-3d-scene relative aspect-square w-4/5 max-w-xs">
+          <FloatingAsset src="/als-3d/fullstack-workstation.webp" className="inset-0" depth={3} duration={7} />
+        </div>
       </div>
       <div className="relative z-10 mx-auto max-w-6xl">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
@@ -26,7 +28,9 @@ export function About({ hero }: { hero: HeroContent }) {
             title="I build systems that stay reliable"
             description={hero.subtext}
           />
-          <LayeredObject family="backend" className="hidden lg:block" />
+          <div className="als-3d-scene relative hidden aspect-square lg:block">
+            <FloatingAsset src="/als-3d/fullstack-workstation.webp" className="inset-0" depth={3} duration={7} interactive />
+          </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {PRINCIPLES.map((principle) => (
