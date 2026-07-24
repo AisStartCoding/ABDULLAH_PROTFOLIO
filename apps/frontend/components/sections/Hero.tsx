@@ -120,8 +120,18 @@ export function Hero({
   const textLayerRef = useRef<HTMLDivElement | null>(null);
   const cardsLayerRef = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
-  const { primaryId, secondaryId, isMobile } = useHomeObjectScheduler(reduced);
+  const { primaryId, secondaryId, isMobile, advance } = useHomeObjectScheduler(reduced);
   const showDevops = primaryId === "devops" || secondaryId === "devops";
+
+  // Tapping/clicking empty background space advances the showcase to the
+  // next object immediately instead of waiting out the current hold time —
+  // but only when the tap actually lands on empty space, not on a link,
+  // button, card or other interactive element.
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("a, button, input, textarea, select, [role='button'], [role='dialog']")) return;
+    advance();
+  };
 
   // COMPLETED state of Home's scene: true once the crossfade has fully
   // resolved to cards (progress ~1). Only then does one more deliberate
@@ -260,7 +270,10 @@ export function Hero({
 
   return (
     <div ref={scrollDriverRef} className="relative h-[220vh]">
-      <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
+      <div
+        className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden px-4 sm:px-6 lg:px-8"
+        onClick={handleBackgroundClick}
+      >
         <div className="light-grid absolute inset-0 opacity-80" />
         <HomeObjectShowcase
           primaryId={primaryId}

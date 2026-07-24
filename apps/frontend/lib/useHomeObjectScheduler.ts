@@ -5,7 +5,7 @@
 // know when "devops" is active so it can render it directly inside its own
 // container, exactly behind the character, instead of guessing at that
 // position from a separate absolutely-positioned sibling).
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getHomeObject, objectTiming, PAIR_WITH, SHOWCASE_SEQUENCE } from "@/lib/homeObjectShowcase";
 
 function usePageVisible() {
@@ -40,6 +40,7 @@ export function useHomeObjectScheduler(reducedMotion: boolean) {
   const indexRef = useRef(0);
   const reverseRef = useRef(false);
   const timeoutsRef = useRef<number[]>([]);
+  const runStepRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const clearTimers = () => {
@@ -51,10 +52,12 @@ export function useHomeObjectScheduler(reducedMotion: boolean) {
       timeoutsRef.current.push(id);
     };
 
-    // Reduced motion: one static supporting object, no scheduler/cycling.
+    // Reduced motion: one static supporting object, no scheduler/cycling —
+    // tapping the background doesn't advance anything in this mode either.
     if (reducedMotion) {
       setPrimaryId("devops");
       setSecondaryId(null);
+      runStepRef.current = null;
       return () => clearTimers();
     }
 
@@ -64,6 +67,15 @@ export function useHomeObjectScheduler(reducedMotion: boolean) {
     }
 
     let cancelled = false;
+
+    const advanceToNext = () => {
+      indexRef.current += 1;
+      const sequence = reverseRef.current ? [...SHOWCASE_SEQUENCE].reverse() : SHOWCASE_SEQUENCE;
+      if (indexRef.current % sequence.length === 0) {
+        reverseRef.current = !reverseRef.current;
+      }
+      runStep();
+    };
 
     const runStep = () => {
       if (cancelled) return;
@@ -84,14 +96,18 @@ export function useHomeObjectScheduler(reducedMotion: boolean) {
       schedule(() => {
         setPrimaryId(null);
         setSecondaryId(null);
-        schedule(() => {
-          indexRef.current += 1;
-          if (indexRef.current % sequence.length === 0) {
-            reverseRef.current = !reverseRef.current;
-          }
-          runStep();
-        }, objectTiming.gapBetweenObjects * 1000);
+        schedule(advanceToNext, objectTiming.gapBetweenObjects * 1000);
       }, objectTiming.enterDuration * 1000 + holdMs);
+    };
+
+    // Exposed so a tap on empty background space can skip straight to the
+    // next scene instead of waiting out the current hold — cancels whatever
+    // timers were pending first so nothing double-fires.
+    runStepRef.current = () => {
+      clearTimers();
+      setPrimaryId(null);
+      setSecondaryId(null);
+      schedule(advanceToNext, objectTiming.gapBetweenObjects * 1000);
     };
 
     schedule(runStep, objectTiming.startDelay * 1000);
@@ -102,5 +118,9 @@ export function useHomeObjectScheduler(reducedMotion: boolean) {
     };
   }, [reducedMotion, pageVisible, isMobile]);
 
-  return { primaryId, secondaryId, isMobile };
+  const advance = useCallback(() => {
+    runStepRef.current?.();
+  }, []);
+
+  return { primaryId, secondaryId, isMobile, advance };
 }

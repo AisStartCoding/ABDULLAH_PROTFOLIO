@@ -4,7 +4,7 @@
 // configuration across JSX components" requirement.
 
 export type ObjectSize = "small" | "medium" | "large";
-export type Zone = "top-right" | "mid-right" | "bottom-right";
+export type Zone = "top-left" | "mid-left" | "bottom-left" | "top-right" | "mid-right" | "bottom-right";
 
 export type HomeObjectConfig = {
   id: string;
@@ -26,12 +26,16 @@ export type HomeObjectConfig = {
 // page's open gutter space rather than colliding with the hero text/cards
 // column, and everything renders at a lower z-index than that content
 // regardless, so proximity on narrower widths never blocks interaction.
-// Each zone is unique per pair (see PAIR_WITH) so two simultaneously visible
-// objects never land on top of each other.
+// Every pair in PAIR_WITH below deliberately spans a left zone and a right
+// zone — never two objects on the same side at once — so a pair always
+// reads as two distinct, non-overlapping objects.
 export const ZONE_CLASSES: Record<Zone, string> = {
-  "top-right": "right-[3%] top-[8%] sm:right-[5%]",
+  "top-left": "left-[3%] top-[10%] sm:left-[5%]",
+  "mid-left": "left-[2%] top-1/2 -translate-y-1/2 sm:left-[4%]",
+  "bottom-left": "left-[4%] bottom-[12%] sm:left-[6%]",
+  "top-right": "right-[3%] top-[10%] sm:right-[5%]",
   "mid-right": "right-[2%] top-1/2 -translate-y-1/2 sm:right-[4%]",
-  "bottom-right": "right-[4%] bottom-[10%] sm:right-[6%]"
+  "bottom-right": "right-[4%] bottom-[12%] sm:right-[6%]"
 };
 
 export const HOME_OBJECTS: HomeObjectConfig[] = [
@@ -69,17 +73,20 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
     src: "/images/home-objects/redis-node.webp",
     alt: "",
     size: "small",
-    zone: "bottom-right",
+    zone: "mid-left",
     holdSeconds: 4.5,
     aspect: 827 / 885,
     mobileEnabled: true
   },
   {
+    // Deliberately on the opposite side from "workstation" below — the two
+    // largest/most detailed scenes should never read as being in the same
+    // spot even though they never appear simultaneously.
     id: "cloud",
     src: "/images/home-objects/cloud-infrastructure.webp",
     alt: "",
     size: "medium",
-    zone: "top-right",
+    zone: "top-left",
     holdSeconds: 5.5,
     aspect: 1,
     mobileEnabled: true
@@ -99,7 +106,7 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
     src: "/images/home-objects/backend-full.png",
     alt: "",
     size: "large",
-    zone: "bottom-right",
+    zone: "mid-right",
     holdSeconds: 6,
     aspect: 1672 / 941,
     mobileEnabled: false
@@ -119,7 +126,7 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
     src: "/images/home-objects/infrastructure-01.png",
     alt: "",
     size: "small",
-    zone: "bottom-right",
+    zone: "bottom-left",
     holdSeconds: 4.5,
     aspect: 634 / 945,
     mobileEnabled: true
@@ -141,6 +148,9 @@ export const SHOWCASE_SEQUENCE = [
   "infra"
 ];
 
+// devops(portrait/left side) + portal(right), python(right) + redis(left),
+// cloud(left) + django(right), workstation(right) + infra(left) — every
+// pair spans opposite sides.
 export const PAIR_WITH: Record<string, string | null> = {
   devops: "portal",
   portal: null,
