@@ -6,8 +6,11 @@ import type { SkillCategory } from "@/types/portfolio";
 
 export function Skills({ categories }: { categories: SkillCategory[] }) {
   return (
-    <section id="skills" className="px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section id="skills" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20 lg:hidden">
+        <LayeredObject family="workstation" className="w-4/5 max-w-xs" />
+      </div>
+      <div className="relative z-10 mx-auto max-w-7xl">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
           <SectionHeader
             eyebrow="Core systems"

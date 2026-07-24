@@ -18,8 +18,11 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
   const filtered = active === "All" ? certificates : certificates.filter((cert) => cert.category === active);
 
   return (
-    <section className="px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20 lg:hidden">
+        <LayeredObject family="certificate" className="w-4/5 max-w-xs" />
+      </div>
+      <div className="relative z-10 mx-auto max-w-6xl">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
           <SectionHeader
             eyebrow="Certificates"
@@ -42,7 +45,7 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
                   key={category}
                   type="button"
                   onClick={() => setActive(category)}
-                  className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
+                  className={`cursor-target rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
                     active === category
                       ? "border-electric-blue bg-electric-blue/10 text-electric-blue"
                       : "border-slate-700/60 text-slate-400 hover:border-slate-600 hover:text-slate-200"
@@ -74,7 +77,7 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
                         href={cert.credential_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 font-semibold text-blue-400 hover:text-blue-300"
+                        className="cursor-target inline-flex items-center gap-1 font-semibold text-blue-400 hover:text-blue-300"
                       >
                         View credential <ExternalLink className="h-3 w-3" />
                       </a>
