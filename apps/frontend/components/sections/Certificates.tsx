@@ -162,42 +162,38 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
                 <div className="als-3d-scene relative aspect-square w-full">
                   <FloatingAsset src="/als-3d/nextjs-portal.webp" className="inset-0" depth={2} motion="portal-spin" />
 
-                  <div className="absolute inset-[16%] z-20 flex">
-                    <CommandCard className="flex w-full flex-col items-center justify-center text-center">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-500/30 bg-blue-500/10">
-                        <Award className="h-6 w-6 text-blue-400" />
-                      </span>
-                      {active ? (
-                        <>
-                          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                            Certificate of completion
-                          </p>
-                          <h3 className="mt-2 text-lg font-semibold text-slate-50">{active.title}</h3>
-                          {active.issuer ? <p className="mt-1 text-sm text-green-400">{active.issuer}</p> : null}
-                          <div className="mt-4 flex w-full items-center justify-between border-t border-slate-800 pt-4 text-xs text-slate-500">
-                            <span>Issuer</span>
-                            <span>Date</span>
-                          </div>
-                          <div className="flex w-full items-center justify-between text-sm text-slate-300">
-                            <span>{active.issuer ?? "—"}</span>
-                            <span>{active.completed_at ?? "In progress"}</span>
-                          </div>
-                          {active.credential_url ? (
-                            <a
-                              href={active.credential_url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="cursor-target mt-5 inline-flex items-center gap-2 rounded-md border border-electric-blue/40 bg-electric-blue/10 px-4 py-2 text-sm font-semibold text-electric-blue hover:bg-electric-blue/20"
-                            >
-                              View Credential <ExternalLink className="h-3.5 w-3.5" />
-                            </a>
-                          ) : null}
-                        </>
-                      ) : (
-                        <p className="mt-4 text-sm text-slate-400">Credentials coming soon.</p>
-                      )}
-                    </CommandCard>
-                  </div>
+                  {active ? (
+                    <div className="absolute inset-[16%] z-20 flex">
+                      <CommandCard className="flex w-full flex-col items-center justify-center text-center">
+                        <span className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-500/30 bg-blue-500/10">
+                          <Award className="h-6 w-6 text-blue-400" />
+                        </span>
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                          Certificate of completion
+                        </p>
+                        <h3 className="mt-2 text-lg font-semibold text-slate-50">{active.title}</h3>
+                        {active.issuer ? <p className="mt-1 text-sm text-green-400">{active.issuer}</p> : null}
+                        <div className="mt-4 flex w-full items-center justify-between border-t border-slate-800 pt-4 text-xs text-slate-500">
+                          <span>Issuer</span>
+                          <span>Date</span>
+                        </div>
+                        <div className="flex w-full items-center justify-between text-sm text-slate-300">
+                          <span>{active.issuer ?? "—"}</span>
+                          <span>{active.completed_at ?? "In progress"}</span>
+                        </div>
+                        {active.credential_url ? (
+                          <a
+                            href={active.credential_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="cursor-target mt-5 inline-flex items-center gap-2 rounded-md border border-electric-blue/40 bg-electric-blue/10 px-4 py-2 text-sm font-semibold text-electric-blue hover:bg-electric-blue/20"
+                          >
+                            View Credential <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        ) : null}
+                      </CommandCard>
+                    </div>
+                  ) : null}
                 </div>
 
                 {active && prev && prev !== active ? (
