@@ -5,6 +5,7 @@ import { LayeredObject } from "@/components/ui/LayeredObject";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { Interests } from "@/components/sections/Interests";
+import { ScrollCrossfade } from "@/components/effects/ScrollCrossfade";
 import { getPortfolioHome } from "@/lib/api";
 
 export const metadata: Metadata = {
@@ -17,9 +18,9 @@ export default async function ContactPage() {
   const { settings, social_links } = data;
 
   return (
-    <div className="pt-24">
-      <section className="px-4 pb-8 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
+    <ScrollCrossfade
+      sections={[
+        <div key="interests">
           <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
             <SectionHeader
               eyebrow="Interests"
@@ -29,11 +30,8 @@ export default async function ContactPage() {
             <LayeredObject family="devops" className="hidden lg:block" />
           </div>
           <Interests />
-        </div>
-      </section>
-
-      <section className="px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_.8fr]">
+        </div>,
+        <div key="contact-form" className="grid gap-6 lg:grid-cols-[1fr_.8fr]">
           <div>
             <h2 className="mb-4 text-2xl font-semibold text-slate-50">Have a product that needs a reliable backend?</h2>
             <ContactForm />
@@ -65,7 +63,7 @@ export default async function ContactPage() {
             ) : null}
           </CommandCard>
         </div>
-      </section>
-    </div>
+      ]}
+    />
   );
 }

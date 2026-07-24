@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ArchitectureLab } from "@/components/sections/ArchitectureLab";
 import { Pipeline } from "@/components/sections/Pipeline";
 import { Projects } from "@/components/sections/Projects";
+import { ScrollCrossfade } from "@/components/effects/ScrollCrossfade";
 import { getPortfolioHome } from "@/lib/api";
 
 export const metadata: Metadata = {
@@ -12,10 +13,12 @@ export const metadata: Metadata = {
 export default async function ProjectsPage() {
   const data = await getPortfolioHome();
   return (
-    <div className="pt-24">
-      <Projects projects={data.projects} />
-      <ArchitectureLab blueprints={data.architecture_blueprints} />
-      <Pipeline steps={data.pipeline_steps} />
-    </div>
+    <ScrollCrossfade
+      sections={[
+        <Projects key="projects" projects={data.projects} />,
+        <ArchitectureLab key="architecture" blueprints={data.architecture_blueprints} />,
+        <Pipeline key="pipeline" steps={data.pipeline_steps} />
+      ]}
+    />
   );
 }

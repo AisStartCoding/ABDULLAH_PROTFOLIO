@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Certificates } from "@/components/sections/Certificates";
+import { ScrollCrossfade } from "@/components/effects/ScrollCrossfade";
 import { getPortfolioHome } from "@/lib/api";
 
 export const metadata: Metadata = {
@@ -9,9 +10,5 @@ export const metadata: Metadata = {
 
 export default async function CertificatesPage() {
   const data = await getPortfolioHome();
-  return (
-    <div className="pt-24">
-      <Certificates certificates={data.certificates} />
-    </div>
-  );
+  return <ScrollCrossfade sections={[<Certificates key="certificates" certificates={data.certificates} />]} />;
 }

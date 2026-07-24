@@ -7,6 +7,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ScrollTrigger } from "@/lib/gsap";
 
 const ORDER = ["/", "/about", "/skills", "/projects", "/certificates", "/contact"];
 
@@ -56,11 +57,26 @@ export function PageTransition({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname;
   }
 
+  // Each page's scroll-crossfade (Home's Hero, and every inner page's
+  // ScrollCrossfade) relies on ScrollTrigger positions matching the current
+  // document layout. Since this is a client-side route swap (not a full
+  // reload), ScrollTrigger doesn't know the DOM changed size/content on its
+  // own — without this, landing back on a page mid-scroll-position from the
+  // previous page showed a stale/half-scrolled crossfade state that upward
+  // scrolling couldn't correct. Reset scroll and recompute once the new
+  // page's own GSAP contexts have had a chance to register.
+  const handleExitComplete = () => {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+  };
+
   if (reduced) return <>{children}</>;
 
   return (
     <div style={{ perspective: 1600 }}>
-      <AnimatePresence mode="wait" initial={false} custom={directionRef.current}>
+      <AnimatePresence mode="wait" initial={false} custom={directionRef.current} onExitComplete={handleExitComplete}>
         <motion.div
           key={pathname}
           custom={directionRef.current}

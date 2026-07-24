@@ -1,6 +1,7 @@
 "use client";
 
 import { OBJECT_MANIFEST } from "@/lib/object-manifest";
+import { withBasePath } from "@/lib/utils";
 
 const ASPECT: Record<string, number> = {
   backend: 1672 / 941,
@@ -26,7 +27,7 @@ export function LayeredObject({ family, className = "" }: { family: keyof typeof
       <div className="motion-float-slow h-full w-full">
         <div aria-hidden className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/15 blur-3xl" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={data.fallback} alt="" className="h-full w-full object-contain" draggable={false} />
+        <img src={withBasePath(data.fallback)} alt="" className="h-full w-full object-contain" draggable={false} />
       </div>
     </div>
   );

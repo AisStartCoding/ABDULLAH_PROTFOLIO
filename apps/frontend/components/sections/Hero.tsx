@@ -8,6 +8,7 @@ import { Tilt3D } from "@/components/ui/Tilt3D";
 import TextType from "@/components/text/TextType";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
+import { withBasePath } from "@/lib/utils";
 import type { HeroContent, SiteSettings } from "@/types/portfolio";
 
 function useReducedMotion() {
@@ -63,7 +64,7 @@ function Portrait() {
         <div className="relative">
           <div aria-hidden className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/20 blur-3xl" />
           <Image
-            src="/avatar-portrait.webp"
+            src={withBasePath("/avatar-portrait.webp")}
             alt="Illustrated portrait of Abdullah Ibna Siddiquie"
             width={700}
             height={1400}

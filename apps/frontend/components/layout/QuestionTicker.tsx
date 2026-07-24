@@ -50,7 +50,7 @@ export function QuestionTicker() {
   }, [reduced]);
 
   return (
-    <div className="flex min-w-0 flex-1 justify-center">
+    <div className="flex min-w-0">
       <motion.div
         key={pulseKey}
         initial={{ boxShadow: "0 0 0px rgba(34,197,94,0)" }}
@@ -60,7 +60,7 @@ export function QuestionTicker() {
             : { boxShadow: ["0 0 0px rgba(34,197,94,0)", "0 0 22px rgba(34,197,94,0.55)", "0 0 10px rgba(34,197,94,0.25)"] }
         }
         transition={{ duration: 1.1, ease: "easeOut" }}
-        className="flex min-w-0 max-w-[9.5rem] items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-2.5 py-1 sm:max-w-xs sm:gap-2 sm:px-4 sm:py-1.5 md:max-w-md"
+        className="flex min-w-0 max-w-[8rem] items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-2.5 py-1 sm:max-w-[11rem] sm:gap-2 sm:px-4 sm:py-1.5 md:max-w-[14rem]"
       >
         <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-green-400" />
         <AnimatePresence mode="wait">

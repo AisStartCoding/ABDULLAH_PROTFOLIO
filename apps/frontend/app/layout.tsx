@@ -49,12 +49,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             />
           </div>
           <div className="relative z-10 flex min-h-screen flex-col">
-            <Navbar
-              settings={data.settings}
-              socialLinks={data.social_links}
-              skillCategories={data.skill_categories}
-              experiences={data.experiences}
-            />
+            <Navbar settings={data.settings} socialLinks={data.social_links} />
             <div className="flex-1">
               <PageTransition>{children}</PageTransition>
             </div>
