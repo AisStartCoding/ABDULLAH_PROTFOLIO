@@ -8,8 +8,7 @@ import { FloatingAsset } from "@/components/effects/FloatingAsset";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
-import { getAdjacentRoutes } from "@/lib/portfolio-routes";
-import { useScrollAdvance } from "@/lib/useScrollAdvance";
+import { useScrollPageNavigation } from "@/lib/useScrollPageNavigation";
 import type { HeroContent } from "@/types/portfolio";
 
 const PRINCIPLES = [
@@ -38,22 +37,11 @@ export function About({ hero }: { hero: HeroContent }) {
   const driverRef = useRef<HTMLDivElement | null>(null);
   const objectRef = useRef<HTMLDivElement | null>(null);
 
-  // COMPLETED for this page means "reached the bottom of About's own
-  // content" (principles + ExperienceSnapshot below), not just the object
-  // choreography finishing — the object settles early in the scroll, well
-  // before the reader has actually seen the rest of the page.
-  const sceneCompleteRef = useRef(false);
-  const { nextHref } = getAdjacentRoutes("/about");
-  useScrollAdvance({ enabledRef: sceneCompleteRef, href: nextHref, direction: 1 });
-
-  useEffect(() => {
-    const onScroll = () => {
-      sceneCompleteRef.current = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Forward (bottom of page -> Skills) and backward (top of page -> Home)
+  // scroll navigation. "Bottom of page" means About's actual content
+  // (principles + ExperienceSnapshot below), not just the object
+  // choreography finishing early in the scroll.
+  useScrollPageNavigation("/about");
 
   // Object choreography: the workstation starts large and dominant, then
   // scales down and settles into its final resting position as the user

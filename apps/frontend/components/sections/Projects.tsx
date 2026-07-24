@@ -7,8 +7,7 @@ import { FloatingAsset } from "@/components/effects/FloatingAsset";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
-import { getAdjacentRoutes } from "@/lib/portfolio-routes";
-import { useScrollAdvance } from "@/lib/useScrollAdvance";
+import { useScrollPageNavigation } from "@/lib/useScrollPageNavigation";
 import type { Project } from "@/types/portfolio";
 
 function useReducedMotion() {
@@ -28,18 +27,7 @@ export function Projects({ projects }: { projects: Project[] }) {
   const driverRef = useRef<HTMLDivElement | null>(null);
   const objectRef = useRef<HTMLDivElement | null>(null);
 
-  const sceneCompleteRef = useRef(false);
-  const { nextHref } = getAdjacentRoutes("/projects");
-  useScrollAdvance({ enabledRef: sceneCompleteRef, href: nextHref, direction: 1 });
-
-  useEffect(() => {
-    const onScroll = () => {
-      sceneCompleteRef.current = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  useScrollPageNavigation("/projects");
 
   // Portal begins large and glowing, scales down to its resting position as
   // the reader scrolls — desktop only, same technique as About/Skills.

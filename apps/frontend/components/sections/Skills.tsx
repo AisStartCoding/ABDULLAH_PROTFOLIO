@@ -8,8 +8,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Chip } from "@/components/ui/Chip";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
-import { getAdjacentRoutes } from "@/lib/portfolio-routes";
-import { useScrollAdvance } from "@/lib/useScrollAdvance";
+import { useScrollPageNavigation } from "@/lib/useScrollPageNavigation";
 import type { SkillCategory } from "@/types/portfolio";
 
 function useReducedMotion() {
@@ -29,18 +28,7 @@ export function Skills({ categories }: { categories: SkillCategory[] }) {
   const driverRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
 
-  const sceneCompleteRef = useRef(false);
-  const { nextHref } = getAdjacentRoutes("/skills");
-  useScrollAdvance({ enabledRef: sceneCompleteRef, href: nextHref, direction: 1 });
-
-  useEffect(() => {
-    const onScroll = () => {
-      sceneCompleteRef.current = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  useScrollPageNavigation("/skills");
 
   // The whole cube+node composition starts large and dominant, then scales
   // down and settles into its resting position as the reader scrolls —
