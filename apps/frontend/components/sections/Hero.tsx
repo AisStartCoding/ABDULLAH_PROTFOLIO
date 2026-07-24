@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { HomeFloaters } from "@/components/sections/HomeFloaters";
+import { HomeObjectShowcase } from "@/components/sections/HomeObjectShowcase";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
 import { Tilt3D } from "@/components/ui/Tilt3D";
@@ -232,7 +232,7 @@ export function Hero({
     <div ref={scrollDriverRef} className="relative h-[220vh]">
       <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="light-grid absolute inset-0 opacity-80" />
-        <HomeFloaters className="absolute inset-0 z-0 hidden lg:block" />
+        <HomeObjectShowcase />
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[.85fr_1.15fr]">
           {/* Portrait: fixed in place for the entire scroll — never
               transformed by scroll position, only pointer-tilt. On mobile it
