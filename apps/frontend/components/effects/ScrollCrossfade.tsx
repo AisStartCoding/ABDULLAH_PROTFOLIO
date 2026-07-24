@@ -49,15 +49,19 @@ export function ScrollCrossfade({ sections }: { sections: ReactNode[] }) {
         }
       });
 
+      // Sequential, not overlapping: the outgoing section fades fully to 0
+      // before the incoming one starts fading in, so there's never a moment
+      // with two sections' text both partially visible on top of each other
+      // (which read as "blurry"/overlapping content).
       const step = 1 / (layers.length - 1);
       for (let i = 1; i < layers.length; i++) {
         const start = (i - 1) * step;
         const prev = layers[i - 1];
         const curr = layers[i];
-        tl.to(prev, { opacity: 0, duration: step * 0.45, ease: "none" }, start)
-          .set(prev, { pointerEvents: "none" }, start + step * 0.4)
-          .to(curr, { opacity: 1, duration: step * 0.45, ease: "none" }, start + step * 0.35)
-          .set(curr, { pointerEvents: "auto" }, start + step * 0.6);
+        tl.to(prev, { opacity: 0, duration: step * 0.42, ease: "none" }, start)
+          .set(prev, { pointerEvents: "none" }, start)
+          .to(curr, { opacity: 1, duration: step * 0.42, ease: "none" }, start + step * 0.5)
+          .set(curr, { pointerEvents: "auto" }, start + step * 0.92);
       }
 
       return () => tl.scrollTrigger?.kill();
@@ -88,7 +92,7 @@ export function ScrollCrossfade({ sections }: { sections: ReactNode[] }) {
             ref={(el) => {
               layerRefs.current[i] = el;
             }}
-            className="absolute inset-0 overflow-y-auto px-4 py-10 sm:px-6 lg:px-8"
+            className="absolute inset-0 overflow-y-auto bg-slate-950/95 px-4 py-10 sm:px-6 lg:px-8"
           >
             <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col justify-center">{section}</div>
           </div>

@@ -60,9 +60,9 @@ export function QuestionTicker() {
             : { boxShadow: ["0 0 0px rgba(34,197,94,0)", "0 0 22px rgba(34,197,94,0.55)", "0 0 10px rgba(34,197,94,0.25)"] }
         }
         transition={{ duration: 1.1, ease: "easeOut" }}
-        className="flex min-w-0 max-w-[8rem] items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-2.5 py-1 sm:max-w-[11rem] sm:gap-2 sm:px-4 sm:py-1.5 md:max-w-[14rem]"
+        className="flex max-w-[52vw] items-center gap-1.5 rounded-full border border-green-500/40 bg-green-950/90 px-2.5 py-1.5 backdrop-blur-sm sm:max-w-[16rem] sm:gap-2 sm:px-4 md:max-w-[20rem]"
       >
-        <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-green-400" />
+        <span className="mt-0.5 h-1.5 w-1.5 shrink-0 animate-pulse self-start rounded-full bg-green-400" />
         <AnimatePresence mode="wait">
           <motion.p
             key={index}
@@ -70,7 +70,7 @@ export function QuestionTicker() {
             animate={{ opacity: 1, y: 0 }}
             exit={reduced ? { opacity: 0 } : { opacity: 0, y: -4 }}
             transition={{ duration: reduced ? 0.15 : 0.4, ease: "easeInOut" }}
-            className="min-w-0 flex-1 select-none truncate font-mono text-[10px] font-medium tracking-tight text-green-300 sm:text-xs"
+            className="min-w-0 select-none whitespace-normal break-words font-mono text-[10px] font-medium leading-snug tracking-tight text-green-300 sm:text-xs"
           >
             {questions[index]}
           </motion.p>
