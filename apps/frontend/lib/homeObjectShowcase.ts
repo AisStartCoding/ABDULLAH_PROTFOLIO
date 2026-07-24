@@ -4,14 +4,18 @@
 // configuration across JSX components" requirement.
 
 export type ObjectSize = "small" | "medium" | "large";
-export type Zone = "behind-character" | "top-right" | "mid-right" | "bottom-right";
+export type Zone = "top-right" | "mid-right" | "bottom-right";
 
 export type HomeObjectConfig = {
   id: string;
   src: string;
   alt: string;
   size: ObjectSize;
-  zone: Zone;
+  /** Absent for "devops" — it doesn't use the generic corner-zone layer at
+   * all. It's anchored directly inside the portrait's own container (see
+   * Portrait in Hero.tsx) so it's guaranteed to sit exactly behind the
+   * character rather than approximating that position from a sibling. */
+  zone?: Zone;
   holdSeconds: number;
   aspect: number;
   mobileEnabled: boolean;
@@ -22,8 +26,9 @@ export type HomeObjectConfig = {
 // page's open gutter space rather than colliding with the hero text/cards
 // column, and everything renders at a lower z-index than that content
 // regardless, so proximity on narrower widths never blocks interaction.
+// Each zone is unique per pair (see PAIR_WITH) so two simultaneously visible
+// objects never land on top of each other.
 export const ZONE_CLASSES: Record<Zone, string> = {
-  "behind-character": "inset-0 flex items-center justify-start lg:justify-start",
   "top-right": "right-[3%] top-[8%] sm:right-[5%]",
   "mid-right": "right-[2%] top-1/2 -translate-y-1/2 sm:right-[4%]",
   "bottom-right": "right-[4%] bottom-[10%] sm:right-[6%]"
@@ -35,7 +40,6 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
     src: "/images/home-objects/devops-infinity.webp",
     alt: "",
     size: "large",
-    zone: "behind-character",
     holdSeconds: 6.5,
     aspect: 1322 / 633,
     mobileEnabled: true
@@ -105,7 +109,7 @@ export const HOME_OBJECTS: HomeObjectConfig[] = [
     src: "/images/home-objects/django-node.webp",
     alt: "",
     size: "small",
-    zone: "top-right",
+    zone: "bottom-right",
     holdSeconds: 4.5,
     aspect: 794 / 856,
     mobileEnabled: true

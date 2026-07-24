@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { HomeObjectShowcase } from "@/components/sections/HomeObjectShowcase";
 import { GlowButton } from "@/components/ui/GlowButton";
@@ -8,8 +9,10 @@ import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 import TextType from "@/components/text/TextType";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { getHomeObject, objectTiming } from "@/lib/homeObjectShowcase";
 import { MOTION } from "@/lib/motion";
 import { getAdjacentRoutes } from "@/lib/portfolio-routes";
+import { useHomeObjectScheduler } from "@/lib/useHomeObjectScheduler";
 import { useScrollAdvance } from "@/lib/useScrollAdvance";
 import { withBasePath } from "@/lib/utils";
 import type { HeroContent, SiteSettings } from "@/types/portfolio";
@@ -60,19 +63,44 @@ function HeroText({ hero, settings }: { hero: HeroContent; settings: SiteSetting
   );
 }
 
-function Portrait() {
+function Portrait({ showDevops = false, reducedMotion = false }: { showDevops?: boolean; reducedMotion?: boolean }) {
+  const devops = getHomeObject("devops");
+
   return (
     <div className="relative z-10 ml-0 mr-auto flex w-full max-w-[15rem] justify-start lg:max-w-xs lg:-translate-x-12 xl:-translate-x-16">
       <Tilt3D maxTilt={4} globalTilt>
         <div className="relative">
           <div aria-hidden className="absolute inset-0 -z-10 scale-90 rounded-full bg-electric-blue/20 blur-3xl" />
+
+          {/* devops-infinity is anchored to this exact container — the same
+              box the portrait itself sits in — so it's guaranteed to appear
+              directly behind and centered on the character, instead of
+              approximating that position from a separate sibling element.
+              Placed before the portrait <Image> in DOM order (and with no
+              z-index of its own) so natural stacking keeps it behind it. */}
+          <AnimatePresence>
+            {showDevops && devops ? (
+              <motion.div
+                aria-hidden
+                className="absolute inset-[-20%] pointer-events-none sm:inset-[-24%]"
+                initial={reducedMotion ? false : { opacity: 0, scale: 0.82, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={reducedMotion ? undefined : { opacity: 0, scale: 0.88, y: 10 }}
+                transition={{ duration: objectTiming.enterDuration }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={withBasePath(devops.src)} alt="" className="h-full w-full object-contain" draggable={false} />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
           <Image
             src={withBasePath("/avatar-portrait.webp")}
             alt="Illustrated portrait of Abdullah Ibna Siddiquie"
             width={700}
             height={1400}
             priority
-            className="h-[36vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[42vh] lg:h-auto lg:w-full"
+            className="relative h-[36vh] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.55)] sm:h-[42vh] lg:h-auto lg:w-full"
             draggable={false}
           />
         </div>
@@ -92,6 +120,8 @@ export function Hero({
   const textLayerRef = useRef<HTMLDivElement | null>(null);
   const cardsLayerRef = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
+  const { primaryId, secondaryId, isMobile } = useHomeObjectScheduler(reduced);
+  const showDevops = primaryId === "devops" || secondaryId === "devops";
 
   // COMPLETED state of Home's scene: true once the crossfade has fully
   // resolved to cards (progress ~1). Only then does one more deliberate
@@ -216,7 +246,7 @@ export function Hero({
     return (
       <div className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[.85fr_1.15fr]">
-          <Portrait />
+          <Portrait showDevops={showDevops} reducedMotion />
           <div>
             <HeroText hero={hero} settings={settings} />
           </div>
@@ -232,7 +262,12 @@ export function Hero({
     <div ref={scrollDriverRef} className="relative h-[220vh]">
       <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="light-grid absolute inset-0 opacity-80" />
-        <HomeObjectShowcase />
+        <HomeObjectShowcase
+          primaryId={primaryId}
+          secondaryId={secondaryId}
+          isMobile={isMobile}
+          reducedMotion={false}
+        />
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[.85fr_1.15fr]">
           {/* Portrait: fixed in place for the entire scroll — never
               transformed by scroll position, only pointer-tilt. On mobile it
@@ -241,7 +276,7 @@ export function Hero({
               instead of pushing it below the fold; from lg it splits into
               its own column as before. */}
           <div className="relative col-start-1 row-start-1 flex justify-center lg:static lg:col-auto lg:row-auto">
-            <Portrait />
+            <Portrait showDevops={showDevops} />
           </div>
 
           {/* Same on-screen slot, two layers crossfading via scroll. */}
