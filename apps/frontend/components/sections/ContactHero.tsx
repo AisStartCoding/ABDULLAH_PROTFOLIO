@@ -30,26 +30,26 @@ export function ContactHero() {
   // no-op; only scrolling up at the top hands back to Certificates.
   useScrollPageNavigation("/contact");
 
-  // Infinity loop starts large and settles as this block scrolls into view.
-  // Deliberately NOT a pinned/sticky driver like the other pages — Interests
-  // below is a variable-height card grid, and pinning content of unknown
-  // height inside an overflow-hidden viewport is exactly the class of bug
-  // ("dead scroll zone" / clipped content) already hit earlier on this site.
-  // A plain scroll-into-view scrub avoids that risk entirely.
+  // Header + object pinned together and settle from focus to resting scale,
+  // matching About/Skills/Projects/Certificates — desktop only. Interests
+  // (variable-height card grid) lives below the driver in normal flow, so
+  // pinning never has to contain unknown-height content (the clipping risk
+  // that ruled out a sticky driver here previously no longer applies once
+  // Interests is outside it).
   useGSAP(
     () => {
       if (reduced) return;
-      const wrapper = wrapperRef.current;
+      const driver = wrapperRef.current;
       const object = objectRef.current;
-      if (!wrapper || !object) return;
+      if (!driver || !object) return;
 
       gsap.set(object, { scale: 1.25, filter: "brightness(1.15)" });
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: wrapper,
-          start: "top 75%",
-          end: "bottom 45%",
+          trigger: driver,
+          start: "top top",
+          end: "bottom bottom",
           scrub: MOTION.scrub
         }
       });
@@ -63,23 +63,34 @@ export function ContactHero() {
 
   return (
     <section className="relative overflow-hidden px-4 pb-8 sm:px-6 lg:px-8">
+      <div ref={wrapperRef} className={reduced ? "relative z-10 mx-auto max-w-6xl" : "relative z-10 mx-auto max-w-6xl lg:h-[140vh]"}>
+        <div
+          className={
+            reduced
+              ? "relative"
+              : "relative lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:items-center lg:overflow-hidden"
+          }
+        >
+          <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
+            <SectionHeader
+              eyebrow="Interests"
+              title="What I like building"
+              description="The kinds of problems and systems I gravitate toward."
+            />
+            <div ref={objectRef} className="als-3d-scene relative hidden aspect-[2/1] lg:block">
+              <FloatingAsset src="/als-3d/devops-infinity.webp" className="inset-0" depth={3} duration={7.5} interactive />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20 lg:hidden">
         <div className="als-3d-scene relative aspect-[2/1] w-4/5 max-w-xs">
           <FloatingAsset src="/als-3d/devops-infinity.webp" className="inset-0" depth={3} duration={7.5} />
         </div>
       </div>
 
-      <div ref={wrapperRef} className="relative z-10 mx-auto max-w-6xl">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
-          <SectionHeader
-            eyebrow="Interests"
-            title="What I like building"
-            description="The kinds of problems and systems I gravitate toward."
-          />
-          <div ref={objectRef} className="als-3d-scene relative hidden aspect-[2/1] lg:block">
-            <FloatingAsset src="/als-3d/devops-infinity.webp" className="inset-0" depth={3} duration={7.5} interactive />
-          </div>
-        </div>
+      <div className="relative z-10 mx-auto max-w-6xl">
         <Interests />
       </div>
     </section>

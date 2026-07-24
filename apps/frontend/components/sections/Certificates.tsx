@@ -78,83 +78,25 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
 
   return (
     <section className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
-      <div className="relative z-10 mx-auto max-w-7xl">
-        <SectionHeader
-          eyebrow="Certificates"
-          title="Learning that supports the work"
-          description="Credentials, focused study, and continuous technical growth."
-        />
-
-        <div ref={driverRef} className={reduced ? "relative mt-10" : "relative mt-10 lg:h-[140vh]"}>
-          <div
-            className={
-              reduced
-                ? "relative"
-                : "relative z-10 lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:items-center lg:overflow-hidden"
-            }
-          >
-            <div className="grid w-full gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
-              {/* Left: category filter + certificate list */}
-              <div>
-                {certificates.length === 0 ? (
-                  <CommandCard className="text-center">
-                    <Award className="mx-auto h-8 w-8 text-slate-500" />
-                    <p className="mt-4 text-slate-400">No certificates published yet — check back soon.</p>
-                  </CommandCard>
-                ) : (
-                  <>
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      {categories.map((category) => (
-                        <button
-                          key={category}
-                          type="button"
-                          onClick={() => setActiveCategory(category)}
-                          className={`cursor-target rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
-                            activeCategory === category
-                              ? "border-electric-blue bg-electric-blue/10 text-electric-blue"
-                              : "border-slate-700/60 text-slate-400 hover:border-slate-600 hover:text-slate-200"
-                          }`}
-                        >
-                          {category}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="space-y-2">
-                      {filtered.map((cert, index) => (
-                        <button
-                          key={cert.id}
-                          type="button"
-                          onClick={() => setActiveIndex(index)}
-                          className={`cursor-target flex w-full items-center gap-3 rounded-lg border p-4 text-left transition-colors ${
-                            index === activeIndex
-                              ? "border-electric-blue bg-electric-blue/10"
-                              : "border-slate-700/60 bg-slate-900 hover:border-slate-600"
-                          }`}
-                        >
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-blue-500/30 bg-blue-500/10">
-                            <Award className="h-5 w-5 text-blue-400" />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate font-semibold text-slate-50">{cert.title}</p>
-                            {index === activeIndex ? (
-                              <span className="text-xs font-semibold uppercase tracking-wide text-green-400">Active</span>
-                            ) : (
-                              <span className="truncate text-xs text-slate-500">{cert.category}</span>
-                            )}
-                          </div>
-                          <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Right: ring + featured card + carousel — always renders,
-                  even with zero certificates published yet, so the object
-                  is never entirely missing from this page. */}
-              <div ref={ringRef} className="relative mx-auto flex w-full max-w-md items-center justify-center py-8">
+      {/* Header + object pinned together and settle from focus to resting
+          scale as the reader scrolls, matching About/Skills/Projects —
+          desktop only. The certificate list/carousel lives below, in normal
+          flow, so it's fully visible with details once the object settles. */}
+      <div ref={driverRef} className={reduced ? "relative" : "relative lg:h-[140vh]"}>
+        <div
+          className={
+            reduced
+              ? "relative"
+              : "relative z-10 lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:items-center lg:overflow-hidden"
+          }
+        >
+          <div className="mx-auto grid w-full max-w-7xl items-center gap-8 lg:grid-cols-[1.1fr_.9fr]">
+            <SectionHeader
+              eyebrow="Certificates"
+              title="Learning that supports the work"
+              description="Credentials, focused study, and continuous technical growth."
+            />
+            <div ref={ringRef} className="relative mx-auto flex w-full max-w-md items-center justify-center py-8">
                 <div aria-hidden className="als-3d-scene absolute inset-[8%] opacity-15">
                   <FloatingAsset src="/als-3d/devops-infinity.webp" className="inset-0" depth={1} duration={9} />
                 </div>
@@ -242,6 +184,62 @@ export function Certificates({ certificates }: { certificates: Certificate[] }) 
             </div>
           </div>
         </div>
+      {/* Category filter + certificate list — normal flow, below the
+          pinned header/object, fully visible with details once settled. */}
+      <div className="relative z-10 mx-auto mt-10 max-w-7xl lg:mt-16">
+        {certificates.length === 0 ? (
+          <CommandCard className="mx-auto max-w-md text-center">
+            <Award className="mx-auto h-8 w-8 text-slate-500" />
+            <p className="mt-4 text-slate-400">No certificates published yet — check back soon.</p>
+          </CommandCard>
+        ) : (
+          <>
+            <div className="mb-4 flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActiveCategory(category)}
+                  className={`cursor-target rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
+                    activeCategory === category
+                      ? "border-electric-blue bg-electric-blue/10 text-electric-blue"
+                      : "border-slate-700/60 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((cert, index) => (
+                <button
+                  key={cert.id}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`cursor-target flex w-full items-center gap-3 rounded-lg border p-4 text-left transition-colors ${
+                    index === activeIndex
+                      ? "border-electric-blue bg-electric-blue/10"
+                      : "border-slate-700/60 bg-slate-900 hover:border-slate-600"
+                  }`}
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-blue-500/30 bg-blue-500/10">
+                    <Award className="h-5 w-5 text-blue-400" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-semibold text-slate-50">{cert.title}</p>
+                    {index === activeIndex ? (
+                      <span className="text-xs font-semibold uppercase tracking-wide text-green-400">Active</span>
+                    ) : (
+                      <span className="truncate text-xs text-slate-500">{cert.category}</span>
+                    )}
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
