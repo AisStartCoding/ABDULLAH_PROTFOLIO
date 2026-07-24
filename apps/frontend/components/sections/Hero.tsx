@@ -6,7 +6,7 @@ import { GlowButton } from "@/components/ui/GlowButton";
 import { ScrollStackNav } from "@/components/sections/ScrollStackNav";
 import { Tilt3D } from "@/components/ui/Tilt3D";
 import TextType from "@/components/text/TextType";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { MOTION } from "@/lib/motion";
 import { withBasePath } from "@/lib/utils";
 import type { HeroContent, SiteSettings } from "@/types/portfolio";
@@ -98,6 +98,16 @@ export function Hero({
       const textLayer = textLayerRef.current;
       const cardsLayer = cardsLayerRef.current;
       if (!driver || !textLayer || !cardsLayer) return;
+
+      // Landing on Home from another page (via the navbar logo, PageNav,
+      // or browser back) can leave window scroll partway down this driver's
+      // height — leftover from wherever the user was on the previous page.
+      // That made the scrub-based crossfade render already half-transitioned
+      // (cards partially shown, headline gone) instead of its initial state.
+      // Always start Home at the top so the timeline's scroll progress is
+      // computed correctly from 0.
+      window.scrollTo(0, 0);
+      ScrollTrigger.refresh();
 
       const cards = gsap.utils.toArray<HTMLElement>(".nav-card", cardsLayer);
 

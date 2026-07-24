@@ -4,6 +4,7 @@
 // prefers-reduced-motion opt-out (renders nothing, default cursor stays) —
 // the original has no accessibility guard beyond a mobile/touch check.
 import { gsap } from "gsap";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./TargetCursor.css";
 
@@ -77,8 +78,10 @@ export default function TargetCursor({
   const targetCornerPositionsRef = useRef<{ x: number; y: number }[] | null>(null);
   const tickerFnRef = useRef<(() => void) | null>(null);
   const activeStrengthRef = useRef({ current: 0 });
+  const forceClearRef = useRef<(() => void) | null>(null);
 
   const reducedMotion = useReducedMotion();
+  const pathname = usePathname();
 
   const isMobile = useMemo(() => {
     if (typeof window === "undefined") return false;
@@ -290,6 +293,13 @@ export default function TargetCursor({
     };
     window.addEventListener("mouseover", enterHandler as EventListener, { passive: true });
 
+    // A hovered target can be removed from the DOM by a route change
+    // (PageTransition swapping content, PageNav's Previous/Next re-rendering)
+    // without ever firing its own "mouseleave" — leaving the corner
+    // highlight frozen on a detached element. Let a pathname-change effect
+    // force the same cleanup the real mouseleave would have run.
+    forceClearRef.current = () => currentLeaveHandler?.();
+
     const resizeHandler = () => {
       containingBlockRef.current = getContainingBlock(cursor);
     };
@@ -322,6 +332,10 @@ export default function TargetCursor({
     cursorColor,
     cursorColorOnTarget
   ]);
+
+  useEffect(() => {
+    forceClearRef.current?.();
+  }, [pathname]);
 
   if (isMobile || reducedMotion) return null;
 
